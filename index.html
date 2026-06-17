@@ -1,167 +1,137 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0044)file:///C:/Users/user/Downloads/index_1.html -->
+<html lang="ru" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Академия DAFNA</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="./Академия DAFNA_files/telegram-web-app.js.загрузка"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--blue:#1A6DB5;--blue-dark:#145a96;--green:#0d7a4e;--red:#dc2626;--gold:#f59e0b}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;font-size:15px}
-.app{max-width:600px;margin:0 auto;background:#fff;min-height:100vh}
-
-/* HEADER */
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;font-size:16px}
+.app{max-width:620px;margin:0 auto;background:#fff;min-height:100vh}
 .hdr{background:linear-gradient(135deg,#1A6DB5,#0e4d8a);color:#fff;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
 .hdr::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%}
-.hdr::after{content:'';position:absolute;bottom:-40px;left:40%;width:160px;height:160px;background:rgba(255,255,255,.05);border-radius:50%}
-.hdr-logo{width:48px;height:48px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex-shrink:0;backdrop-filter:blur(4px)}
-.hdr-text h1{font-size:18px;font-weight:700;letter-spacing:-.3px}
-.hdr-text p{font-size:12px;opacity:.75;margin-top:3px}
-
-/* PROGRESS */
-.prog-bar{background:linear-gradient(135deg,#e8f0fa,#dce8f5);padding:1rem 1.5rem;border-bottom:1px solid #d0dce8}
-.prog-row{display:flex;justify-content:space-between;font-size:13px;color:#555;margin-bottom:8px;font-weight:500}
-.prog-track{height:8px;background:rgba(0,0,0,.1);border-radius:4px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,#1A6DB5,#22c55e);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.hdr-logo{width:50px;height:50px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0}
+.hdr-text h1{font-size:20px;font-weight:700}
+.hdr-text p{font-size:13px;opacity:.75;margin-top:3px}
+.prog-bar{background:linear-gradient(135deg,#e8f0fa,#dce8f5);padding:1.1rem 1.5rem;border-bottom:1px solid #d0dce8}
+.prog-row{display:flex;justify-content:space-between;font-size:14px;color:#555;margin-bottom:8px;font-weight:600}
+.prog-track{height:10px;background:rgba(0,0,0,.1);border-radius:5px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#1A6DB5,#22c55e);border-radius:5px;transition:width .6s}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-.stat{background:#fff;border:1px solid #d0dce8;border-radius:10px;padding:10px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:transform .2s}
-.stat:hover{transform:translateY(-2px)}
-.stat-n{font-size:20px;font-weight:700;color:var(--blue)}
-.stat-l{font-size:11px;color:#777;margin-top:2px}
-
-/* TABS */
+.stat{background:#fff;border:1px solid #d0dce8;border-radius:12px;padding:10px;text-align:center}
+.stat-n{font-size:22px;font-weight:700;color:var(--blue)}
+.stat-l{font-size:12px;color:#777;margin-top:2px}
 .tabs{display:flex;border-bottom:2px solid #e8f0fa;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10}
-.tab{padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;border:none;border-bottom:3px solid transparent;color:#888;background:none;transition:all .2s;margin-bottom:-2px}
-.tab.on{color:var(--blue);border-bottom-color:var(--blue);background:linear-gradient(180deg,transparent,#f0f6ff)}
-.tab:hover:not(.on){color:#555;background:#f8f9fa}
-
-/* VIEWS */
+.tab{padding:13px 15px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;border:none;border-bottom:3px solid transparent;color:#888;background:none;transition:all .2s;margin-bottom:-2px}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
 .view{display:none;padding:1.25rem}
 .view.on{display:block;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* MODULE CARDS */
-.mod-card{border:1px solid #dde6f0;border-radius:14px;margin-bottom:12px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:box-shadow .2s,transform .2s}
-.mod-card:hover{box-shadow:0 4px 16px rgba(26,109,181,.12);transform:translateY(-1px)}
-.mod-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer}
-.mod-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.mod-card{border:1px solid #dde6f0;border-radius:14px;margin-bottom:12px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:box-shadow .2s}
+.mod-card:hover{box-shadow:0 4px 16px rgba(26,109,181,.12)}
+.mod-head{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer}
+.mod-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
 .n-done{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46}
 .n-act{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af}
 .n-lock{background:#f3f4f6;color:#9ca3af}
 .mod-inf{flex:1}
-.mod-title{font-size:14px;font-weight:700;color:#1a1a1a}
+.mod-title{font-size:15px;font-weight:700;color:#1a1a1a}
 .mod-meta{font-size:12px;color:#888;margin-top:3px}
 .mod-badge{font-size:11px;padding:4px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;font-weight:600}
 .b-done{background:#d1fae5;color:#065f46}
 .b-act{background:#dbeafe;color:#1e40af}
 .b-lock{background:#f3f4f6;color:#9ca3af}
 .mod-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
-.mod-body.open{max-height:1000px}
+.mod-body.open{max-height:1200px}
 .mod-lessons{padding:0 16px 14px;border-top:1px solid #f0f4f8}
-.les-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f5f7fa;cursor:pointer;transition:all .2s;border-radius:8px;padding-left:4px;padding-right:4px}
+.les-row{display:flex;align-items:center;gap:12px;padding:11px 6px;border-bottom:1px solid #f5f7fa;cursor:pointer;border-radius:8px;transition:all .2s}
 .les-row:last-child{border-bottom:none}
 .les-row:hover{background:#f0f6ff;transform:translateX(4px)}
-.les-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.les-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .li-done{background:#d1fae5;color:#065f46}
 .li-act{background:#dbeafe;color:#1e40af}
 .li-lock{background:#f3f4f6;color:#9ca3af}
-.les-name{flex:1;font-size:13px;color:#1a1a1a;font-weight:500}
-.les-time{font-size:11px;color:#aaa;background:#f3f4f6;padding:2px 7px;border-radius:10px}
-
-/* LESSON */
-.back-btn{display:flex;align-items:center;gap:8px;background:none;border:1.5px solid #dde6f0;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;color:#555;margin-bottom:1.25rem;transition:all .2s}
+.les-name{flex:1;font-size:14px;color:#1a1a1a;font-weight:500}
+.les-time{font-size:11px;color:#aaa;background:#f3f4f6;padding:3px 8px;border-radius:10px}
+.back-btn{display:flex;align-items:center;gap:8px;background:none;border:1.5px solid #dde6f0;border-radius:10px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;color:#555;margin-bottom:1.25rem;transition:all .2s}
 .back-btn:hover{background:#f0f6ff;border-color:var(--blue);color:var(--blue)}
-.les-title{font-size:20px;font-weight:800;margin-bottom:6px;color:#0f172a;line-height:1.3}
-.les-desc{font-size:14px;color:#64748b;margin-bottom:1.25rem;line-height:1.7}
-.csec{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:12px;padding:1.25rem;margin-bottom:12px;border:1px solid #e2e8f0;transition:transform .2s}
-.csec:hover{transform:translateY(-2px)}
-.csec h3{font-size:14px;font-weight:700;margin-bottom:10px;color:#1e293b;display:flex;align-items:center;gap:8px}
-.csec p{font-size:13px;line-height:1.8;color:#374151}
+.les-title{font-size:22px;font-weight:800;margin-bottom:8px;color:#0f172a;line-height:1.3}
+.les-desc{font-size:15px;color:#64748b;margin-bottom:1.25rem;line-height:1.7}
+.img-card{width:100%;border-radius:14px;margin-bottom:14px;overflow:hidden;background:linear-gradient(135deg,#1A6DB5,#0e4d8a);position:relative}
+.img-card img{width:100%;height:200px;object-fit:cover;display:block}
+.img-card-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff;padding:1rem;font-size:13px;font-weight:600}
+.csec{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:14px;padding:1.25rem;margin-bottom:12px;border:1px solid #e2e8f0}
+.csec h3{font-size:15px;font-weight:700;margin-bottom:10px;color:#1e293b;display:flex;align-items:center;gap:8px}
+.csec p{font-size:14px;line-height:1.8;color:#374151}
 .kfacts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.kf{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #e2e8f0;border-left:4px solid var(--blue);transition:transform .2s}
-.kf:hover{transform:translateX(4px)}
+.kf{background:#fff;border-radius:10px;padding:10px 12px;border:1px solid #e2e8f0;border-left:4px solid var(--blue)}
 .kf strong{font-size:11px;color:#94a3b8;font-weight:500;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
-.kf span{font-size:13px;font-weight:700;color:#1e293b}
-.warn-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:12px 14px;font-size:13px;color:#92400e;margin-bottom:12px;line-height:1.6;border-left:4px solid #f59e0b}
-.done-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-top:1.25rem;transition:all .2s;box-shadow:0 4px 12px rgba(26,109,181,.3)}
-.done-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,109,181,.4)}
-.done-btn:disabled{background:linear-gradient(135deg,#059669,#047857);cursor:default;transform:none;box-shadow:0 4px 12px rgba(5,150,105,.3)}
-
-/* QUIZ */
-.q-title{font-size:18px;font-weight:800;margin-bottom:4px;color:#0f172a}
-.qprow{display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:8px;font-weight:500}
-.qt{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:1.25rem}
-.qf{height:100%;background:linear-gradient(90deg,var(--blue),#6366f1);border-radius:3px;transition:width .4s}
-
-/* TIMER */
-.timer-wrap{display:flex;justify-content:center;margin-bottom:1rem}
-.timer{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:10px 20px;border-radius:30px;font-size:16px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.kf span{font-size:14px;font-weight:700;color:#1e293b}
+.warn-box{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:12px;padding:12px 14px;font-size:14px;color:#92400e;margin-bottom:12px;line-height:1.6;border-left:4px solid #f59e0b}
+.done-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:1.25rem;transition:all .2s;box-shadow:0 4px 12px rgba(26,109,181,.3)}
+.done-btn:hover{transform:translateY(-2px)}
+.done-btn:disabled{background:linear-gradient(135deg,#059669,#047857);cursor:default;transform:none}
+.q-title{font-size:20px;font-weight:800;margin-bottom:4px;color:#0f172a}
+.qprow{display:flex;justify-content:space-between;font-size:13px;color:#94a3b8;margin-bottom:8px;font-weight:500}
+.qt{height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden;margin-bottom:1.25rem}
+.qf{height:100%;background:linear-gradient(90deg,var(--blue),#6366f1);border-radius:4px;transition:width .4s}
+.timer-wrap{display:flex;justify-content:center;margin-bottom:1.1rem}
+.timer{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:10px 22px;border-radius:30px;font-size:18px;font-weight:700}
 .timer.warn{background:linear-gradient(135deg,#dc2626,#b91c1c);animation:pulse .8s infinite}
-.timer-icon{font-size:18px}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-
 .qcard{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:14px;padding:1.25rem;margin-bottom:12px;border:1px solid #e2e8f0}
-.qtext{font-size:15px;font-weight:700;margin-bottom:14px;line-height:1.5;color:#1e293b}
-.opt{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;margin-bottom:8px;background:#fff;transition:all .2s;font-size:13px}
+.qtext{font-size:16px;font-weight:700;margin-bottom:16px;line-height:1.5;color:#1e293b}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border:2px solid #e2e8f0;border-radius:10px;cursor:pointer;margin-bottom:9px;background:#fff;transition:all .2s}
 .opt:hover{border-color:var(--blue);background:#f0f6ff;transform:translateX(4px)}
 .opt.sel{border-color:var(--blue);background:#dbeafe}
 .opt.ok{border-color:#059669;background:#d1fae5}
 .opt.no{border-color:var(--red);background:#fee2e2}
-.opt-l{width:26px;height:26px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#6b7280}
+.opt-l{width:28px;height:28px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#6b7280}
 .opt.sel .opt-l{background:var(--blue);color:#fff}
 .opt.ok .opt-l{background:#059669;color:#fff}
 .opt.no .opt-l{background:var(--red);color:#fff}
-.opt-t{font-size:13px;line-height:1.5;color:#1e293b;font-weight:500}
-.fb{padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:12px;line-height:1.6;border-left:4px solid;animation:fadeIn .3s}
+.opt-t{font-size:14px;line-height:1.5;color:#1e293b;font-weight:500}
+.fb{padding:13px 14px;border-radius:10px;font-size:14px;margin-bottom:12px;line-height:1.6;border-left:4px solid;animation:fadeIn .3s}
 .fb-ok{background:#d1fae5;color:#065f46;border-color:#059669}
 .fb-no{background:#fee2e2;color:#991b1b;border-color:var(--red)}
-.nxt-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(26,109,181,.3)}
-.nxt-btn:hover{transform:translateY(-2px)}
-.nxt-btn:disabled{opacity:.3;cursor:default;transform:none;box-shadow:none}
-
-/* RESULT */
-.res-card{text-align:center;padding:2rem 1.5rem;border:1px solid #e2e8f0;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#f1f5f9);box-shadow:0 4px 20px rgba(0,0,0,.08)}
-.res-ring{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:28px;font-weight:800;box-shadow:0 4px 20px rgba(0,0,0,.15)}
-.r-pass{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;border:3px solid #059669}
-.r-fail{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;border:3px solid var(--red)}
-.res-t{font-size:20px;font-weight:800;margin-bottom:6px}
-.res-m{font-size:14px;color:#64748b;line-height:1.7;margin-bottom:1.5rem}
+.nxt-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.nxt-btn:disabled{opacity:.3;cursor:default}
+.res-card{text-align:center;padding:2rem 1.5rem;border:1px solid #e2e8f0;border-radius:16px;background:linear-gradient(135deg,#f8fafc,#f1f5f9)}
+.res-ring{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:32px;font-weight:800}
+.r-pass{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;border:4px solid #059669}
+.r-fail{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;border:4px solid var(--red)}
+.res-t{font-size:22px;font-weight:800;margin-bottom:6px}
+.res-m{font-size:15px;color:#64748b;line-height:1.7;margin-bottom:1.5rem}
 .res-acts{display:flex;gap:10px}
-.btn-o{flex:1;padding:12px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-o:hover{border-color:var(--blue);color:var(--blue)}
-.btn-p{flex:1;padding:12px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(26,109,181,.3);transition:all .2s}
-.btn-p:hover{transform:translateY(-2px)}
-
-/* RATING */
+.btn-o{flex:1;padding:13px;border:2px solid #e2e8f0;border-radius:10px;background:#fff;font-size:14px;font-weight:700;cursor:pointer}
+.btn-p{flex:1;padding:13px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+.final-badge{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:14px;padding:1.25rem;margin-bottom:12px;text-align:center}
+.final-badge h3{font-size:17px;font-weight:800;margin-bottom:4px}
 .rating-card{background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:16px;padding:1.25rem;margin-bottom:16px;color:#fff}
-.rating-title{font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.rating-title{font-size:17px;font-weight:700;margin-bottom:4px}
 .rating-sub{font-size:12px;opacity:.6;margin-bottom:1rem}
-.rating-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.rating-item{display:flex;align-items:center;gap:12px;padding:11px 6px;border-bottom:1px solid rgba(255,255,255,.08)}
 .rating-item:last-child{border-bottom:none}
-.rating-pos{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.rating-pos{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
 .pos-1{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff}
 .pos-2{background:linear-gradient(135deg,#94a3b8,#64748b);color:#fff}
 .pos-3{background:linear-gradient(135deg,#c2692a,#a35421);color:#fff}
 .pos-other{background:rgba(255,255,255,.1);color:#94a3b8}
-.rating-name{flex:1;font-size:13px;font-weight:600}
+.rating-name{flex:1;font-size:14px;font-weight:600}
 .rating-bar-wrap{width:80px;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
 .rating-bar{height:100%;background:linear-gradient(90deg,#1A6DB5,#6366f1);border-radius:3px;transition:width .8s}
-.rating-score{font-size:13px;font-weight:700;color:#93c5fd;min-width:36px;text-align:right}
-
-/* CERTS */
-.cert{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:10px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:all .2s}
-.cert:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
-.cert-ico{width:44px;height:44px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.rating-score{font-size:14px;font-weight:700;color:#93c5fd;min-width:36px;text-align:right}
+.cert{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid #e2e8f0;border-radius:12px;margin-bottom:10px;background:#fff}
+.cert-ico{width:46px;height:46px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px}
 .cert-info{flex:1}
-.cert-n{font-size:14px;font-weight:700;color:#1e293b}
-.cert-d{font-size:11px;color:#94a3b8;margin-top:3px}
-.cert-s{font-size:15px;font-weight:800;color:#059669}
+.cert-n{font-size:15px;font-weight:700;color:#1e293b}
+.cert-d{font-size:12px;color:#94a3b8;margin-top:3px}
+.cert-s{font-size:16px;font-weight:800;color:#059669}
 .empty{text-align:center;padding:3rem 1rem;color:#94a3b8}
-.empty-icon{font-size:48px;margin-bottom:1rem;display:block;opacity:.5}
-.empty p{font-size:14px;line-height:1.6}
-
-/* CONFETTI */
+.empty-icon{font-size:52px;margin-bottom:1rem;display:block}
+.empty p{font-size:15px;line-height:1.6}
 .confetti-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
 .confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:confettiFall 3s ease-in forwards}
 @keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
@@ -169,157 +139,419 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </head>
 <body>
 <div class="app">
-  <div class="hdr">
-    <div class="hdr-logo">D</div>
-    <div class="hdr-text"><h1>Академия DAFNA</h1><p>Furniture · Flooring — обучение персонала</p></div>
+<div class="hdr">
+  <div class="hdr-logo">D</div>
+  <div class="hdr-text"><h1>Академия DAFNA</h1><p>Программа обучения сотрудников</p></div>
+</div>
+<div class="prog-bar">
+  <div class="prog-row"><span>📈 Прогресс обучения</span><span id="pct">0%</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="s1">0/21</div><div class="stat-l">Уроков</div></div>
+    <div class="stat"><div class="stat-n" id="s2">0</div><div class="stat-l">Тестов</div></div>
+    <div class="stat"><div class="stat-n" id="s3">—</div><div class="stat-l">Средний балл</div></div>
   </div>
-  <div class="prog-bar">
-    <div class="prog-row"><span>📈 Общий прогресс</span><span id="pct">0%</span></div>
-    <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
-    <div class="stats">
-      <div class="stat"><div class="stat-n" id="s1">0</div><div class="stat-l">Уроков</div></div>
-      <div class="stat"><div class="stat-n" id="s2">0</div><div class="stat-l">Тестов</div></div>
-      <div class="stat"><div class="stat-n" id="s3">—</div><div class="stat-l">Средний балл</div></div>
-    </div>
-  </div>
-  <div class="tabs">
-    <button class="tab on" onclick="go('modules')">📋 Модули</button>
-    <button class="tab" onclick="go('learn')">📖 Урок</button>
-    <button class="tab" onclick="go('quiz')">✅ Тест</button>
-    <button class="tab" onclick="go('rating')">🏆 Рейтинг</button>
-    <button class="tab" onclick="go('certs')">🎓 Достижения</button>
-  </div>
-  <div class="view on" id="tab-modules"><div id="mod-list"></div></div>
-  <div class="view" id="tab-learn"><div id="les-content"></div></div>
-  <div class="view" id="tab-quiz"><div id="quiz-content"><div class="empty"><span class="empty-icon">✅</span><p>Завершите уроки модуля чтобы открыть тест</p></div></div></div>
-  <div class="view" id="tab-rating"><div id="rating-content"></div></div>
-  <div class="view" id="tab-certs"><div id="certs-content"></div></div>
-</div><script>
+</div>
+<div class="tabs">
+  <button class="tab on" onclick="go(&#39;modules&#39;)">📋 Модули</button>
+  <button class="tab" onclick="go(&#39;learn&#39;)">📖 Урок</button>
+  <button class="tab" onclick="go(&#39;quiz&#39;)">✅ Тест</button>
+  <button class="tab" onclick="go(&#39;rating&#39;)">🏆 Рейтинг</button>
+  <button class="tab" onclick="go(&#39;certs&#39;)">🎓 Итоги</button>
+</div>
+<div class="view on" id="tab-modules"><div id="mod-list"><div class="mod-card"><div class="mod-head" onclick="toggleM(1,0)">
+      <div class="mod-num n-act">1</div>
+      <div class="mod-inf"><div class="mod-title">🏢 История и стандарты DAFNA</div>
+      <div class="mod-meta">3 урок · 35 мин</div></div>
+      <span class="mod-badge b-act">▶ В процессе</span></div>
+    <div class="mod-body " id="mb-1">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;1a&#39;,1)">
+            <div class="les-ico li-act">📖</div>
+            <span class="les-name">История компании DAFNA</span><span class="les-time">10 мин</span></div><div class="les-row" onclick="openL(&#39;1b&#39;,1)">
+            <div class="les-ico li-act">📖</div>
+            <span class="les-name">Стандарты внешнего вида</span><span class="les-time">7 мин</span></div><div class="les-row" onclick="openL(&#39;1c&#39;,1)">
+            <div class="les-ico li-act">📖</div>
+            <span class="les-name">Регламент рабочего дня</span><span class="les-time">8 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(2,1)">
+      <div class="mod-num n-lock">2</div>
+      <div class="mod-inf"><div class="mod-title">💬 Контакт с клиентом</div>
+      <div class="mod-meta">3 урок · 45 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-2">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;2a&#39;,2)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Первый контакт: поза и речь</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;2b&#39;,2)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Скрипты начала диалога</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;2c&#39;,2)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Выявление потребностей</span><span class="les-time">13 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(3,1)">
+      <div class="mod-num n-lock">3</div>
+      <div class="mod-inf"><div class="mod-title">🪑 Кресла и стулья DAFNA</div>
+      <div class="mod-meta">3 урок · 50 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-3">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;3a&#39;,3)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Виды кресел и эргономика</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;3b&#39;,3)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Механизмы кресел</span><span class="les-time">15 мин</span></div><div class="les-row" onclick="openL(&#39;3c&#39;,3)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Материалы обивки кресел</span><span class="les-time">10 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(4,1)">
+      <div class="mod-num n-lock">4</div>
+      <div class="mod-inf"><div class="mod-title">🛋️ Мягкая мебель</div>
+      <div class="mod-meta">3 урок · 45 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-4">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;4a&#39;,4)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Диваны: конструкция и производство</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;4b&#39;,4)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Выбор дивана: вопросы и механизмы</span><span class="les-time">10 мин</span></div><div class="les-row" onclick="openL(&#39;4c&#39;,4)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Сроки и уход</span><span class="les-time">8 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(5,1)">
+      <div class="mod-num n-lock">5</div>
+      <div class="mod-inf"><div class="mod-title">🗄️ Корпусная мебель и AIKO</div>
+      <div class="mod-meta">2 урок · 40 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-5">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;5a&#39;,5)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Материалы корпусной мебели</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;5b&#39;,5)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Бренд AIKO: экоротанг</span><span class="les-time">10 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(6,1)">
+      <div class="mod-num n-lock">6</div>
+      <div class="mod-inf"><div class="mod-title">🎯 Презентация и возражения</div>
+      <div class="mod-meta">2 урок · 50 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-6">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;6a&#39;,6)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Формула ХПВ — презентация товара</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;6b&#39;,6)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Работа с возражениями — все скрипты</span><span class="les-time">15 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(7,1)">
+      <div class="mod-num n-lock">7</div>
+      <div class="mod-inf"><div class="mod-title">🌟 Жалобы и сервис</div>
+      <div class="mod-meta">2 урок · 35 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-7">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;7a&#39;,7)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Работа с жалобами клиентов</span><span class="les-time">12 мин</span></div><div class="les-row" onclick="openL(&#39;7b&#39;,7)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Сервис который продаёт</span><span class="les-time">10 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(8,1)">
+      <div class="mod-num n-lock">8</div>
+      <div class="mod-inf"><div class="mod-title">💰 Допродажи и завершение</div>
+      <div class="mod-meta">2 урок · 35 мин</div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-8">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;8a&#39;,8)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Дополнительные продажи</span><span class="les-time">10 мин</span></div><div class="les-row" onclick="openL(&#39;8b&#39;,8)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Завершение продажи</span><span class="les-time">8 мин</span></div>
+        
+      </div></div></div><div class="mod-card" style="opacity: 0.55;"><div class="mod-head" onclick="toggleM(9,1)">
+      <div class="mod-num n-lock">9</div>
+      <div class="mod-inf"><div class="mod-title">🏆 ФИНАЛЬНЫЙ ТЕСТ</div>
+      <div class="mod-meta">1 урок · 20 мин · <strong style="color:#f59e0b">Итоговый</strong></div></div>
+      <span class="mod-badge b-lock">🔒 Заблокировано</span></div>
+    <div class="mod-body " id="mb-9">
+      <div class="mod-lessons">
+        <div class="les-row" onclick="openL(&#39;9a&#39;,9)">
+            <div class="les-ico li-lock">🔒</div>
+            <span class="les-name">Подготовка к итоговому тесту</span><span class="les-time">10 мин</span></div>
+        
+      </div></div></div></div></div>
+<div class="view" id="tab-learn"><div id="les-content"></div></div>
+<div class="view" id="tab-quiz"><div id="quiz-content"><div class="empty"><span class="empty-icon">✅</span><p>Завершите уроки модуля чтобы открыть тест</p></div></div></div>
+<div class="view" id="tab-rating"><div id="rating-content"></div></div>
+<div class="view" id="tab-certs"><div id="certs-content"><div class="empty"><span class="empty-icon">🎓</span><p>Сдайте тест по любому модулю чтобы получить достижение</p></div></div></div>
+</div>
+<script>
 const tg=window.Telegram?.WebApp;
 if(tg)tg.ready();
-const uid=new URLSearchParams(window.location.search).get('uid')||'guest';
+
+const IMGS={
+  company:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
+  dress:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80',
+  schedule:'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600&q=80',
+  contact:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80',
+  scripts:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80',
+  needs:'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=600&q=80',
+  chairs:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80',
+  mechanisms:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
+  sofa:'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80',
+  corpus:'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80',
+  aiko:'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80',
+  objections:'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=600&q=80',
+  complaints:'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80',
+  upsell:'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80',
+  closing:'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80',
+};
 
 const MODULES=[
-{id:1,title:"Добро пожаловать в DAFNA",icon:"🏢",time:"30 мин",
+{id:1,title:"История и стандарты DAFNA",icon:"🏢",time:"35 мин",
 lessons:[
-{id:"1a",title:"История и миссия компании",time:"8 мин",content:{
-desc:"DAFNA — Furniture & Flooring, лидирующая сеть шоу-румов в Узбекистане. С 1995 года специализируемся на офисных решениях и мебели для дома.",
-secs:[{icon:"🏢",title:"О компании DAFNA",text:"DAFNA — сеть мебельных шоу-румов Furniture + Flooring. Флагманский магазин на Джами — там максимальный ассортимент. Компания является эксклюзивным поставщиком ряда брендов по всему Узбекистану."},{icon:"👤",title:"Цель работы консультанта",text:"Консультант подчиняется стор-менеджеру. Цель — обеспечение максимального объёма продаж через создание оптимальных условий для выбора и оплаты товара. Контроль: Коммерческая служба, стор-менеджер и тайные покупатели."}],
-facts:[{k:"Год основания",v:"1995"},{k:"Специализация",v:"Офис + Дом"},{k:"Флагман",v:"Шоу-рум Джами"},{k:"Контроль",v:"Тайный покупатель"}]}},
-{id:"1b",title:"Стандарты внешнего вида",time:"7 мин",content:{
+{id:"1a",title:"История компании DAFNA",time:"10 мин",img:IMGS.company,content:{
+desc:"DAFNA — лидирующая сеть мебельных шоурумов Узбекистана с 1995 года. Furniture + Flooring.",
+secs:[
+{icon:"📅",title:"История и развитие",text:"1995 — основание компании, старт в сегменте офисной мебели и кресел. 2005 — партнёрство с Kronospan (крупнейший европейский производитель ламината). 2008 — партнёрство с AIKO, первый производитель ротанга в СНГ. Сегодня — более 500 моделей кресел, шоурумы по всему Узбекистану. Флагманский шоурум на Джами — самый большой и полный."},
+{icon:"🎯",title:"Миссия и партнёры",text:"Миссия DAFNA: стильная и качественная мебель для офиса, дома, кафе и ресторанов. DAFNA — эксклюзивный поставщик ряда брендов в Узбекистане. Партнёры: Kronospan (Европа) — ламинат. AIKO — экоротанг, Лофт, Хайтек. Hettich (Германия) — фурнитура мирового класса. Клиенты: Radisson, Hilton, Amirsoy и сотни офисов Ташкента."}],
+facts:[{k:"Год основания",v:"1995"},{k:"Флагман",v:"Шоурум Джами"},{k:"Моделей кресел",v:"500+"},{k:"Партнёры",v:"Kronospan, Hettich, AIKO"}]}},
+{id:"1b",title:"Стандарты внешнего вида",time:"7 мин",img:IMGS.dress,content:{
 desc:"Внешний вид сотрудника — первое что видит клиент. Стандарты DAFNA обязательны для всех.",
-secs:[{icon:"👔",title:"Форма одежды",text:"Верх: рубашки, поло, блузки, или фирменная футболка. Запрещены майки с лямками и платья. Низ: тёмные брюки или джинсы без рваных элементов. Обувь: закрытая, чистая. Запрещены тапочки и вьетнамки. У каждого сотрудника есть бейдж: ДОЛЖНОСТЬ + ИМЯ."},{icon:"🚫",title:"Запрещённое поведение",text:"В зале при клиентах ЗАПРЕЩЕНО: пользоваться телефоном, жевать жвачку, есть и пить, громко разговаривать, сидеть на мебели, обсуждать клиентов или внутренние проблемы шоу-рума."}],
-facts:[{k:"Парфюм",v:"без резкого запаха"},{k:"Бейдж",v:"у каждого"},{k:"Телефон",v:"только вне зала"},{k:"Украшения",v:"аккуратные"}]}},
-{id:"1c",title:"Регламент рабочего дня",time:"8 мин",content:{
-desc:"Приход за 10–15 минут до смены, отметка в Bio Track, чёткий порядок действий в начале дня.",
-secs:[{icon:"🕐",title:"График и смены",text:"Смены: 8:00–17:00, 9:00–18:00, 12:00–21:00, 13:00–22:00. График 6/1. Обед — 40 минут при отсутствии клиентов. Приход и уход отмечаются в Bio Track. При болезни — звонок стор-менеджеру за 2 часа."},{icon:"✅",title:"Начало рабочего дня",text:"1. Прийти за 10–15 минут. 2. Обойти зону — проверить чистоту. 3. Проверить все ценники. 4. При новом товаре — красиво выставить, подобрать декор. 5. Следить за мерчандайзингом."}],
-facts:[{k:"Приход",v:"за 10–15 мин"},{k:"Обед",v:"40 минут"},{k:"Учёт",v:"Bio Track"},{k:"Отпуск",v:"после 6 мес."}]}}],
+secs:[
+{icon:"👔",title:"Форма одежды",text:"ВЕРХ: рубашки, поло, блузки (не сильно открытые), или фирменная футболка. ЗАПРЕЩЕНО: майки с лямками, открытые топы, платья. НИЗ: тёмные брюки, джинсы без рваных элементов. ОБУВЬ: закрытая, чистая. ЗАПРЕЩЕНО: тапочки, вьетнамки, открытые носки."},
+{icon:"🚫",title:"Запрещённое поведение в зале",text:"СТРОГО ЗАПРЕЩЕНО: мобильный телефон, жвачка, еда и питьё, причёсываться в зале, громко смеяться, сидеть или облокачиваться на мебель, обсуждать клиентов и внутренние проблемы, оценивать платёжеспособность по внешнему виду."}],
+facts:[{k:"Бейдж",v:"обязателен для всех"},{k:"Телефон",v:"только вне зала"},{k:"Парфюм",v:"без резкого запаха"},{k:"Украшения",v:"аккуратные, небольшие"}]}},
+{id:"1c",title:"Регламент рабочего дня",time:"8 мин",img:IMGS.schedule,content:{
+desc:"Дисциплина — основа профессионализма. Знание регламента защищает вас и создаёт атмосферу для клиентов.",
+secs:[
+{icon:"🕐",title:"График и смены",text:"СМЕНЫ: 8:00–17:00, 9:00–18:00, 12:00–21:00, 13:00–22:00. ГРАФИК: 6/1, выходные по согласованию, утверждаются до 01-го числа. ОБЕД: 40 минут при отсутствии клиентов. Bio Track — отмечать приход и уход обязательно. При болезни — звонить за 2 часа до смены."},
+{icon:"☀️",title:"Чеклист начала дня",text:"✓ Прийти за 10–15 минут. ✓ Обойти ответственную зону — чистота и пыль. ✓ Проверить все ценники — информация актуальна. ✓ Новый товар — красиво выставить, продумать декор. ✓ Следить за мерчандайзингом: сочетающиеся элементы для допродажи."}],
+facts:[{k:"Приход",v:"за 10–15 мин"},{k:"Обед",v:"40 мин"},{k:"Bio Track",v:"отмечать всегда"},{k:"Отпуск",v:"после 6 мес."}]}}],
 quiz:[
-{q:"Что является целью работы консультанта DAFNA?",opts:["Продать любым способом","Обеспечить максимальный объём продаж создав оптимальные условия","Привлекать клиентов через соцсети","Следить за чистотой зала"],a:1,exp:"Цель консультанта — обеспечение максимального объёма продаж посредством создания оптимальных условий покупателям для выбора и оплаты товара."},
-{q:"Как консультант встречает входящего клиента?",opts:["Ждёт пока клиент сам подойдёт","Встаёт, выходит навстречу, здоровается с улыбкой","Продолжает заниматься своими делами","Сразу предлагает дорогой товар"],a:1,exp:"При входе клиента консультант ВСТАЁТ, ВЫХОДИТ навстречу и приветствует доброжелательно с улыбкой."},
-{q:"За сколько минут нужно приходить на работу?",opts:["Ровно к началу","За 5 минут","За 10–15 минут","За 30 минут"],a:2,exp:"Стандарт DAFNA: приходить за 10–15 минут до начала смены."},
-{q:"Что запрещено в торговом зале при клиентах?",opts:["Предлагать кофе","Рассказывать о новинках","Пользоваться мобильным телефоном","Показывать образцы тканей"],a:2,exp:"При работе с покупателями ЗАПРЕЩЕНО пользоваться телефоном, смотреть видео, общаться в мессенджерах."},
-{q:"Как называется программа учёта прихода/ухода?",opts:["1С ERP","Bio Track","CRM DAFNA","TeleBot"],a:1,exp:"Приход и уход отмечается в программе Bio Track."}]},
+{q:"За сколько минут приходить до начала смены?",opts:["Ровно к началу","За 5 минут","За 10–15 минут","За 30 минут"],a:2,exp:"Стандарт DAFNA: за 10–15 минут до смены для проверки зоны и ценников."},
+{q:"Что запрещено делать в зале при клиентах?",opts:["Предлагать кофе","Рассказывать о новинках","Пользоваться мобильным телефоном","Показывать образцы"],a:2,exp:"При покупателях ЗАПРЕЩЕНО: телефон, видео, мессенджеры, жвачка, еда в зале."},
+{q:"На бейдже консультанта указано:",opts:["Только имя","Должность и имя","Должность, имя и отчество","Только должность"],a:1,exp:"Консультант: ДОЛЖНОСТЬ + ИМЯ. Стор-менеджер: ДОЛЖНОСТЬ + ИМЯ + ОТЧЕСТВО."}]},
 
 {id:2,title:"Контакт с клиентом",icon:"💬",time:"45 мин",
 lessons:[
-{id:"2a",title:"Первый контакт: поза и речь",time:"12 мин",content:{
-desc:"Правильный первый контакт — 50% успеха продажи. Поза, взгляд и первые слова определяют всё.",
-secs:[{icon:"🧍",title:"Язык тела",text:"Прямая осанка. Открытая поза — руки и ноги не скрещены. Дистанция 1–1,5 метра. Умеренная жестикуляция. Не облокачиваться на мебель. ЗАПРЕЩЕНО: скрещивать руки, держать в карманах, сидеть на мебели при клиенте."},{icon:"💬",title:"Правила речи",text:"Обращаться только на «ВЫ». Избегать: «нет», «не знаю», «не можем». Исключить: «молодой человек», «девушка», «женщина», «мужчина», «брат», «сестра». Запрещены слова-паразиты."}],
-facts:[{k:"Дистанция",v:"1–1,5 метра"},{k:"Обращение",v:"только на «ВЫ»"},{k:"Запрет",v:"«не знаю», «нет»"},{k:"Поза",v:"открытая, прямая"}],
-warn:"ЗАПРЕЩЁННЫЕ ФРАЗЫ: «Вам помочь?» / «Что подсказать?» / «Ищете что-то конкретное?» — дают клиенту повод ответить «Просто смотрю»."}},
-{id:"2b",title:"Скрипты начала диалога",time:"12 мин",content:{
-desc:"Вместо банальных вопросов — умные скрипты DAFNA для определения типа клиента.",
-secs:[{icon:"🔀",title:"Скрипт 1 и 2",text:"«Здравствуйте! Вы у нас первый раз или ранее уже были?» Если был — к потребностям. Если первый раз — даём осмотреться, рассказываем об акциях. «Вы хотите поменять мебель или делаете обстановку с нуля?»"},{icon:"👥",title:"Скрипт 3: для себя или объекта?",text:"«Вы для себя присматриваете или для объекта?» — обязательный вопрос. Если дизайнер/прораб — вопросы по проекту, вносим в базу. Если для себя — рассказываем о брендах и акциях."}],
-facts:[{k:"Пауза",v:"3–5 сек осмотра"},{k:"Ключевой вопрос",v:"«Для себя или объекта?»"},{k:"Новый клиент",v:"навигация + акции"},{k:"Постоянный",v:"сразу к потребностям"}]}},
-{id:"2c",title:"Выявление потребностей",time:"13 мин",content:{
-desc:"«Что для Вас самое важное при выборе?» — главный вопрос DAFNA.",
-secs:[{icon:"❓",title:"Главный вопрос",text:"«На что обращаете внимание в первую очередь — дизайн, цвет, материал?» КАЧЕСТВО — уточните что именно. ДИЗАЙН — спросите о конечном результате. ЦЕНА — узнайте бюджет, затем: «А если не рассматривать цену?»"},{icon:"📋",title:"Вопросы по товарам",text:"КРЕСЛА: для кого, цвет, обивка, проблемы со спиной. ДИВАН: офис или дом, цвет, раскладной, животные. КОРПУСНАЯ: классика или модерн, размер, дизайн-проект."}],
-facts:[{k:"Главный вопрос",v:"качество/дизайн/цена"},{k:"При «дорого»",v:"уточнить бюджет"},{k:"При «кресла»",v:"уточнить назначение"},{k:"При «диван»",v:"наличие животных!"}]}}],
+{id:"2a",title:"Первый контакт: поза и речь",time:"12 мин",img:IMGS.contact,content:{
+desc:"Первое впечатление — за 30 секунд. Правильный контакт — 50% успеха продажи.",
+secs:[
+{icon:"🧍",title:"Язык тела",text:"ОБЯЗАТЕЛЬНО: прямая осанка, открытая поза (руки/ноги не скрещены), улыбка и зрительный контакт, дистанция 1–1,5 м. ЗАПРЕЩЕНО: скрещивать руки, держать в карманах, облокачиваться на мебель, сидеть на мебели при клиентах."},
+{icon:"💬",title:"Стандарты речи",text:"Обращаться на «ВЫ» ко всем. Запрещённые слова: «нет», «не знаю», «не можем», «к сожалению». Запрещённые обращения: «молодой человек», «девушка», «женщина», «мужчина», «брат», «сестра». Телефон: «Добрый день, мебельный салон DAFNA, [имя]». Не говорить «алло». Запрещено «Я не знаю» — говорить «Я уточню»."},
+{icon:"⛔",title:"9 запрещённых фраз начала продажи",text:"1. «Чем Вам помочь?» 2. «Что подсказать?» 3. «Ищете что-то конкретное?» 4. «Я вас слушаю» 5. «Могу я быть полезной/ым?» 6. «Какие у вас вопросы?» 7. «Вы что-то ищите?» 8. «Вас что-то заинтересовало?» 9. «Вы определились с моделью?» — все они дают клиенту повод ответить «Просто смотрю» и закрыть диалог!"}],
+facts:[{k:"Дистанция",v:"1–1,5 метра"},{k:"Обращение",v:"только на «ВЫ»"},{k:"Телефон",v:"между 2-м и 3-м звонком"},{k:"Запрет",v:"«Не знаю», «Нет»"}],
+warn:"9 ЗАПРЕЩЁННЫХ ФРАЗ: «Вам помочь?» / «Что подсказать?» / «Ищете что-то?» — дают клиенту повод ответить «Просто смотрю» и закрыть диалог."}},
+{id:"2b",title:"Скрипты начала диалога",time:"12 мин",img:IMGS.scripts,content:{
+desc:"Умные скрипты DAFNA вместо избитых вопросов — открывают диалог и определяют тип клиента.",
+secs:[
+{icon:"🔀",title:"Скрипты 1–3: идентификация клиента",text:"Скрипт 1: «Здравствуйте! Вы у нас первый раз или ранее были?» → Был: к потребностям. Первый раз: навигация + акции. Скрипт 2: «Хотите поменять мебель или делаете обстановку с нуля?» → Купить: к потребностям. «Просто смотрю»: дать осмотреться. Скрипт 3: «Вы для себя или для объекта?» → Объект (дизайнер/прораб): вопросы по проекту, вносить в базу. Для себя: рассказать о брендах."},
+{icon:"🎯",title:"Скрипты 4–7: по категориям мебели",text:"КРЕСЛА (скрипт 7): «Для руководителя/сотрудников/посетителей/домашнее?» → разные вопросы под каждый тип. МЯГКАЯ МЕБЕЛЬ: «В офис или домой?» → В офис: цвет, обивка, размер кабинета. Домой: цвет, раскладной?, животные?. СТИЛЬ (скрипт 5): «Современный (хайтек/лофт) или классический (арт деко)?» → хром/покраска, закруглённые/острые края, золото/серебро. БРЕНДЫ (скрипт 6): «С какими брендами обычно работаете?» → рассказать о DAFNA и AIKO."}],
+facts:[{k:"Пауза перед подходом",v:"1–2 минуты"},{k:"Дистанция наблюдения",v:"2–3 метра"},{k:"Ключевой вопрос",v:"«Для себя или объекта?»"},{k:"«Просто смотрю»",v:"навигация + акции"}]}},
+{id:"2c",title:"Выявление потребностей",time:"13 мин",img:IMGS.needs,content:{
+desc:"«Что для Вас самое важное при выборе?» — главный вопрос DAFNA. Ответ определяет всю стратегию.",
+secs:[
+{icon:"❓",title:"Главный вопрос и реакции",text:"«На что обращаете внимание в первую очередь — дизайн, цвет, материал, механизм?» ↳ КАЧЕСТВО: «Что Вы имеете ввиду? Какие характеристики важны?» ↳ ДИЗАЙН: «Расскажите — какой конечный результат хотели бы увидеть?» ↳ ЦЕНА: «В какой бюджет? А если не рассматривать цену — что на первом месте?»"},
+{icon:"📋",title:"Вопросы по категориям (40 вопросов DAFNA)",text:"КОРПУСНАЯ: стиль (классика/модерн), количество кабинетов, план, принтер отдельный?, тумбы встроенные или отдельные?, документы — сколько шкафов? КРЕСЛА: для кого, цвет, обивка, вес, спина болит?, тип покрытия пола (ламинат/ковролин), подлокотники с/без, откидной механизм?, массаж?. СТОЛЫ/СТУЛЬЯ: сколько человек в семье, кухня или гостиная, улица или помещение, цвет столешницы и сидений."},
+{icon:"💡",title:"Приёмы активного слушания",text:"ПОВТОРЕНИЕ: «Как я понял, Вы хотите кресло для офиса — правильно?» СЛЕДСТВИЕ: «Итак, Вам нужно кресло которое подчеркнёт статус». ПОДДАКИВАНИЕ: кивать, говорить «Да», «Понятно», «Именно». СОПРЯЖЁННЫЕ ПОТРЕБНОСТИ: купил стол → нужно кресло → нужна тумба → нужен шкаф. Ради главной потребности клиент готов пожертвовать второстепенными — заплатить больше или ждать."}],
+facts:[{k:"Главный вопрос",v:"качество/дизайн/цена"},{k:"При «дорого»",v:"сначала уточнить бюджет"},{k:"При «кресло»",v:"для кого?"},{k:"При «диван»",v:"есть ли животные?"}]}}],
 quiz:[
-{q:"Какой вопрос главный при выявлении потребностей?",opts:["«Сколько хотите потратить?»","«Что для Вас самое важное при выборе?»","«Какой цвет нравится?»","«Выбрали модель?»"],a:1,exp:"Ключевой вопрос: «Что для Вас самое важное при выборе?». Ответ определяет всю дальнейшую презентацию."},
-{q:"Клиент ответил «Просто смотрю» — что делает консультант?",opts:["Оставляет одного","Задаёт вопросы","Даёт осмотреться, рассказывает о навигации и акциях","Переходит к презентации"],a:2,exp:"«Просто смотрю» — покупка маловероятна. Дайте осмотреться, расскажите где что находится и об акциях."},
-{q:"Почему «Вам помочь?» — плохая фраза?",opts:["Она грубая","Даёт клиенту повод ответить «Нет» и закрыть диалог","Слишком длинная","Неуважительная"],a:1,exp:"«Вам помочь?» резко снижает шансы для повторного контакта — клиент отвечает «Просто смотрю»."},
-{q:"На каком расстоянии держаться от покупателя?",opts:["Вплотную","0,5 метра","1–1,5 метра","3–4 метра"],a:2,exp:"Социально приемлемая дистанция — 1–1,5 метра. Ближе — давление, дальше — безразличие."},
-{q:"Что делать если клиент — дизайнер или прораб?",opts:["Обслуживать как обычного","Задать вопросы по проекту и внести в базу","Отправить к менеджеру","Дать каталог и отойти"],a:1,exp:"Дизайнеры и прорабы — ключевые B2B клиенты. Вопросы: стиль, объём заказов, класс клиентов. Внести в базу."}]},
+{q:"Какой вопрос главный при выявлении потребностей?",opts:["«Сколько потратить?»","«Что для Вас самое важное при выборе?»","«Какой цвет нравится?»","«Уже выбрали модель?»"],a:1,exp:"Ключевой вопрос: «Что для Вас самое важное?». Ответ (качество/дизайн/цена) определяет всю стратегию презентации."},
+{q:"Клиент ответил «Просто смотрю» — действия консультанта:",opts:["Задавать вопросы","Оставить одного","Дать осмотреться, рассказать о навигации и акциях","Сразу начать презентацию"],a:2,exp:"«Просто смотрю» — покупка маловероятна. Дать осмотреться, рассказать где что находится и об акциях."},
+{q:"Почему «Вам помочь?» — плохая стартовая фраза?",opts:["Она грубая","Даёт клиенту повод ответить «Нет» и закрыть диалог","Слишком длинная","Неуважительная"],a:1,exp:"«Вам помочь?» резко снижает шансы для повторного контакта — клиент отвечает «Просто смотрю»."}]},
 
-{id:3,title:"Ассортимент: кресла и стулья",icon:"🪑",time:"50 мин",
+{id:3,title:"Кресла и стулья DAFNA",icon:"🪑",time:"50 мин",
 lessons:[
-{id:"3a",title:"Виды кресел DAFNA",time:"12 мин",content:{
-desc:"DAFNA — лидирующий поставщик кресел в РУз. Более 500 моделей.",
-secs:[{icon:"📋",title:"Классификация кресел",text:"РУКОВОДИТЕЛЯ — солидный вид, большие размеры, натуральная кожа. ПЕРСОНАЛЬНЫЕ — удобство + надёжность, газлифт. ПОСЕТИТЕЛЬСКИЕ — комфорт при ожидании. КОНФЕРЕНЦ — длительное сидение. ДЕТСКИЕ — безопасные материалы. ГЕЙМЕРСКИЕ — спортивный дизайн, максимальная эргономика."},{icon:"🏆",title:"Преимущества DAFNA",text:"С 1995 года на рынке. Более 500 моделей. Гарантия 1 год + постгарантийное обслуживание. Возможность купить комплектующие. Синхромеханизм и газлифт. Обивка: кожа, ткань, сетка, эко-кожа."}],
-facts:[{k:"Моделей",v:"более 500"},{k:"На рынке",v:"с 1995 года"},{k:"Гарантия",v:"1 год + сервис"},{k:"Флагман",v:"Шоу-рум Джами"}]}},
-{id:"3b",title:"Механизмы: газлифт и синхромеханизм",time:"15 мин",content:{
-desc:"Знание механизмов — ключевой аргумент при продаже.",
-secs:[{icon:"⚙️",title:"Газлифт: классы",text:"Класс 1 (до 80кг) — бюджетные. Класс 2 (до 100кг) — эконом. Класс 3 (до 150кг) — стандарт офисных кресел. Класс 4 (до 200кг) — премиум. Также обеспечивает вращение 360°."},{icon:"🔄",title:"Синхромеханизм",text:"При наклоне спинки автоматически меняется угол сиденья 3:1 (спинка 3° → сиденье 1°). Позвоночник расслаблен. БЕЗ синхромеханизма кресло — просто табурет со спинкой! Freelock — фиксация под любым углом. Self Balance — автоподстройка под вес 50–120 кг."}],
-facts:[{k:"Лучший класс",v:"Газлифт 3–4"},{k:"Главный механизм",v:"Синхромеханизм"},{k:"Пропорция",v:"3:1"},{k:"4D подлокотники",v:"макс. комфорт"}]}},
-{id:"3c",title:"Материалы обивки и уход",time:"10 мин",content:{
-desc:"Умение объяснить разницу материалов — ваш профессиональный плюс.",
-secs:[{icon:"🪡",title:"Виды тканей и кожи",text:"Ткань C — синтетика, бюджет. ZT — полиолефин. Микрофибра — мягкая, устойчива к загрязнениям. JP — устойчива к выцветанию И износу. Кожа A (Split) — обработана полностью. Кожа B — люкс, воздухопроницаемая. Кожа C — минимальная обработка, высшая категория. Эко-кожа (ПУ) — практична. Сетка — вентиляция."},{icon:"💧",title:"Уход",text:"КОЖА: влажная тряпка ежедневно, спецсредство раз в полгода. ТКАНЬ: влажная тряпка, пылесос регулярно. НЕЛЬЗЯ: жёсткие губки, бензин, ацетон."}],
-facts:[{k:"Лучшая вентиляция",v:"Акриловая сетка"},{k:"Самая дорогая",v:"Кожа кат. C"},{k:"Самая практичная",v:"Эко-кожа / JP"},{k:"Уход за кожей",v:"раз в полгода"}]}}],
+{id:"3a",title:"Виды кресел и эргономика",time:"12 мин",img:IMGS.chairs,content:{
+desc:"DAFNA — лидирующий поставщик кресел в РУз с 1995 года. Более 500 моделей. Знание классификации — основа правильной рекомендации.",
+secs:[
+{icon:"📋",title:"6 видов кресел",text:"РУКОВОДИТЕЛЯ: солидный вид, большие размеры, натуральная кожа, подголовник — подчёркивают статус. ПЕРСОНАЛА (операторские): удобство + надёжность, газлифт, форма спинки — ежедневная интенсивная работа. ПОСЕТИТЕЛЬСКИЕ: комфорт при ожидании, лёгкая конструкция. КОНФЕРЕНЦ: длительное сидение, анатомическое положение. ДЕТСКИЕ: безопасные материалы, нет острых углов, множество регулировок. ГЕЙМЕРСКИЕ: спортивный дизайн на базе гоночных кресел, максимальная эргономика, подходят для офиса."},
+{icon:"⚙️",title:"Эргономика — аргумент для клиента",text:"Когда человек сидит — вся нагрузка на позвоночник. Мышцы перенапрягаются, зажимаются сосуды. Хорошее кресло снижает нагрузку. Анализируйте задачи клиента: длинные звонки → спинка + подголовник. Компьютер → подлокотники + сиденье. Документы → универсальная модель. Разные пользователи одного кресла → газлифт обязателен. DAFNA: гарантия 1 год + постгарантийное обслуживание + комплектующие в наличии."},
+{icon:"🏆",title:"Фразы для презентации кресел",text:"«С 1995 года DAFNA является лидирующим поставщиком кресел в РУз — более 500 моделей». «Удобные подлокотники из металла или дерева, прикреплённые к основанию кресла». «Эргономичная спинка с различными углами наклона и фиксацией». «Гигроскопичный обивочный материал — кожа, ткань, сетка, эко-кожа». «Гарантия 1 год + постгарантийное техническое обслуживание»."}],
+facts:[{k:"Моделей",v:"более 500"},{k:"На рынке",v:"с 1995 года"},{k:"Гарантия",v:"1 год + сервис"},{k:"Обивка",v:"кожа, ткань, сетка, эко-кожа"}]}},
+{id:"3b",title:"Механизмы кресел",time:"15 мин",img:IMGS.mechanisms,content:{
+desc:"Знание механизмов — главный аргумент. Это то что отличает качественное кресло от дешёвого.",
+secs:[
+{icon:"⬆️",title:"Газлифт — 4 класса",text:"Газлифт = регулировка высоты + вращение 360°. КЛАСС 1 (1,2мм, до 80кг) — бюджетные. КЛАСС 2 (1,5мм, до 100кг) — эконом. КЛАСС 3 (2,0мм, до 150кг) — СТАНДАРТ офисных кресел. КЛАСС 4 (2,5мм, до 200кг) — VIP/массивные. Без газлифта — нет комфорта (особенно если несколько пользователей)."},
+{icon:"🔄",title:"Синхромеханизм и другие",text:"СИНХРОМЕХАНИЗМ: спинка 3° → сиденье 1° (пропорция 3:1). Позвоночник всегда в контакте. БЕЗ СИНХРОМЕХАНИЗМА — табурет со спинкой! FREELOCK: фиксация спинки под ЛЮБЫМ углом без ограничений. SELF BALANCE: автоподстройка под вес 50–120 кг, 4 фиксированных положения. REACT (VIP): ось вращения совпадает с тазобедренным суставом, 7 положений фиксации. МУЛЬТИБЛОК: высота + качание + фиксация (для руководителя)."},
+{icon:"💪",title:"Подлокотники 1D/2D/3D/4D",text:"1D — только высота. 2D — высота + угол. 3D — высота + угол + вылет вперёд-назад. 4D — высота + угол + вылет + смещение влево-вправо (максимум настройки). Без подлокотников — плечи поднимаются весь день, появляется сутулость. Совет: выставить подлокотники на уровень стола — руки и плечи расслаблены."}],
+facts:[{k:"Стандарт офиса",v:"Газлифт класса 3"},{k:"Главный механизм",v:"Синхромеханизм"},{k:"Пропорция",v:"спинка 3° → сиденье 1°"},{k:"Макс. комфорт",v:"4D подлокотники"}]}},
+{id:"3c",title:"Материалы обивки кресел",time:"10 мин",img:IMGS.chairs,content:{
+desc:"Умение объяснить разницу материалов — ваш профессиональный козырь при продаже.",
+secs:[
+{icon:"🪡",title:"Виды тканей",text:"СЕРИЯ C (синтетика) — бюджетные посетительские/операторские. СЕРИЯ ZT (полиолефин) — недорогие, иногда для руководства. МИКРОФИБРА — мягкая, не прилипает к одежде, без катышков, устойчива к загрязнениям — средний сегмент. СЕРИЯ JP — устойчива к выцветанию И к износу — лучше микрофибры по долговечности. СЕТКА АКРИЛОВАЯ — воздухопроницаемость, отталкивание грязи и воды — бизнес-класс, идеальна летом."},
+{icon:"🐄",title:"Кожа и экокожа",text:"КОЖА категория A (Split): полная обработка, прочная, полимерная защита — бизнес-класс. Категория B: класс люкс, минимальная коррекция, воздухопроницаемая. Категория C: высшая, почти без обработки, природные красители, максимальная гигроскопичность — премиум-люкс. ЭКОКОЖА (ПУ): ткань с ПУ-покрытием, стойкая, лёгкий уход, богатый выбор цветов — доступная альтернатива."},
+{icon:"💧",title:"Уход за материалами",text:"КОЖА: влажная тряпка ежедневно + спецсредство раз в полгода. ТКАНЬ: влажная тряпка при пятнах + регулярный пылесос. МЕТАЛЛ: влажная тряпка → сухая до блеска. НЕЛЬЗЯ: жёсткие губки с металлической стружкой, бензин, ацетон, отбеливатели. При пятне — действовать немедленно, старые выводятся хуже."}],
+facts:[{k:"Лучшая вентиляция",v:"Акриловая сетка"},{k:"Самая дорогая",v:"Кожа кат. C"},{k:"Практичная",v:"Серия JP"},{k:"Уход за кожей",v:"1 раз в полгода"}]}}],
 quiz:[
-{q:"Какой класс газлифта стандартен для офисных кресел?",opts:["Класс 1","Класс 2","Класс 3","Класс 4"],a:2,exp:"Газлифт класса 3 (до 150кг) — стандарт для офисных кресел."},
-{q:"В чём суть синхромеханизма?",opts:["Вращение 360°","При наклоне спинки меняется угол сиденья 3:1","Спинка фиксируется","Подлокотники регулируются"],a:1,exp:"Синхромеханизм: спинка 3° → сиденье 1°. Без него кресло — «табурет со спинкой»."},
-{q:"Какой материал лучше для жаркого климата?",opts:["Натуральная кожа","Эко-кожа","Акриловая сетка","Синтетика C"],a:2,exp:"Акриловая сетка — лучшая вентиляция, препятствует накоплению влаги."},
-{q:"Сколько моделей кресел в ассортименте DAFNA?",opts:["Около 50","Около 100","Более 200","Более 500"],a:3,exp:"Ассортимент DAFNA — более 500 моделей кресел."},
-{q:"Что означают «4D подлокотники»?",opts:["4 цвета","Регулировка: высота, угол, вылет, ширина","4 уровня жёсткости","4 точки крепления"],a:1,exp:"4D — максимальная регулировка в 4 направлениях."}]},
+{q:"Какой класс газлифта — стандарт офисных кресел?",opts:["Класс 1","Класс 2","Класс 3","Класс 4"],a:2,exp:"Газлифт класса 3 (2мм, до 150кг) — стандарт для всех офисных кресел. Вращение 360°."},
+{q:"Суть синхромеханизма кресла:",opts:["Вращение 360°","Спинка и сиденье меняют угол синхронно 3:1","Спинка фиксируется","Подлокотники двигаются"],a:1,exp:"Синхромеханизм: спинка 3° → сиденье 1°. Позвоночник в контакте. Без него — «табурет со спинкой»."},
+{q:"Какой материал лучше в жаркий сезон?",opts:["Натуральная кожа","Экокожа","Акриловая сетка","Синтетика C"],a:2,exp:"Акриловая сетка — максимальная воздухопроницаемость. Бизнес-класс."}]},
 
-{id:4,title:"Презентация и возражения",icon:"🎯",time:"50 мин",
+{id:4,title:"Мягкая мебель",icon:"🛋️",time:"45 мин",
 lessons:[
-{id:"4a",title:"Мягкая и корпусная мебель",time:"14 мин",content:{
-desc:"Клиент покупает не свойства — он покупает выгоду.",
-secs:[{icon:"🛋️",title:"Мягкая мебель DAFNA",text:"КАРКАС — массив дерева, 200кг/м². ПОРОЛОН — казахского производства, плотность 22. ТКАНЬ — российского производства. ИНДИВИДУАЛЬНО — любая расцветка под заказ. ЗАМЕР — бесплатно. ГАРАНТИЯ — 1 год + техобслуживание. ВАЖНО: не называть партнёров — «местное производство»."},{icon:"🗄️",title:"Корпусная мебель",text:"ЛАМИНАТ — Kronospan (РФ, крупнейший в Европе). ОБОРУДОВАНИЕ — немецкое. ФУРНИТУРА — Hettich, гарантия 12–15 лет. Китайские механизмы: 1 год, дешевле. СРОКИ: стандарт 8–10 дней, нестандарт 12–15. 10 стандартных цветов."}],
-facts:[{k:"Каркас",v:"Массив, 200кг/м²"},{k:"Поролон",v:"плотность 22"},{k:"Фурнитура",v:"Hettich 12–15 лет"},{k:"Ламинат",v:"Kronospan (РФ)"}],
-warn:"ЗАПРЕЩЕНО: показывать на товар пальцем, говорить «Я не знаю» (говорите «Я уточню»), давать непроверенную информацию."}},
-{id:"4b",title:"Бренд AIKO",time:"8 мин",content:{
-desc:"AIKO — партнёр DAFNA. Первая компания в СНГ по ротангу.",
-secs:[{icon:"🌿",title:"О бренде AIKO",text:"На рынке с 2008 года. Экоротанг, стили Лофт и Хайтек. Первая в СНГ с ротангом. Экспортёр. Представительства в РФ, Казахстане, Таджикистане. Мебель в Radisson, Hilton, Amirsoy. Сертификат ISO 9001-2015."},{icon:"⭐",title:"Преимущества AIKO",text:"Не используется вторичное сырьё. Ручная работа + новейшие технологии. Многократный контроль. Офис и дом. Гарантия 1 год: металл не сломается, не прогнётся, кромка и краска не отойдут."}],
-facts:[{k:"На рынке",v:"с 2008 года"},{k:"Стили",v:"Лофт, Хайтек, Ротанг"},{k:"Сертификат",v:"ISO 9001-2015"},{k:"Клиенты",v:"Radisson, Hilton"}]}},
-{id:"4c",title:"Работа с возражениями",time:"15 мин",content:{
-desc:"Возражение — не отказ, а запрос на информацию.",
-secs:[{icon:"💰",title:"Возражение «Дорого»",text:"«Скажите, а с чем Вы сравниваете?». Если аналог другого бренда: «Разница в цене обычно объясняется разницей в качестве. А те модели такие же качественные?». Если тот же бренд дешевле — позвоните и проверьте. DAFNA: цены на 15–20% ниже рынка."},{icon:"🏪",title:"Другие возражения",text:"«Что за AIKO?» — история с 2008, Radisson/Hilton, ISO. «Китайский товар плохой» — работаем с заводами-экспортёрами в Европу, 10+ лет, тысячи клиентов. «Мало ассортимента» — инфостенд с полным каталогом. «Долго доставка» — есть экспресс (платная)."}],
-facts:[{k:"Правило №1",v:"Не спорить"},{k:"Правило №2",v:"Не начинать с «нет»"},{k:"При «дорого»",v:"уточнить сравнение"},{k:"Цены DAFNA",v:"на 15–20% ниже"}],
-warn:"Важнее ПРЕДОТВРАЩАТЬ возражения. При изменении сроков — НЕМЕДЛЕННО предупреждать клиента!"}},
-],
+{id:"4a",title:"Диваны: конструкция и производство",time:"12 мин",img:IMGS.sofa,content:{
+desc:"Мягкая мебель DAFNA производится на заказ — любая расцветка, форма, исполнение.",
+secs:[
+{icon:"🪵",title:"Конструкция дивана",text:"1. КАРКАС — самое важное. Массив дерева (дуб, орех, ясень, сосна). Нагрузка до 200 кг/м². 2. НАПОЛНИТЕЛЬ — поролон казахского производства, плотность 22. Для спинки/подлокотников — мебельный поролон, для сиденья — пружинные блоки или поролон. 3. КРОЙКА И ШИТЬЁ — изготовление чехла. 4. ОБИВКА — ткани российского производства: велюр, микрофибра, жаккард, шенилл, флок, гобелен, экокожа, натуральная кожа."},
+{icon:"✨",title:"Преимущества для презентации",text:"«Любая расцветка, форма и дизайн под заказ». «Бесплатный замер — выезжаем если не знаете размеры». «Гарантия 1 год + техническое обслуживание». «При каркасных поломках — забираем, ремонтируем, возвращаем». ВАЖНО: при рассказе о производителе НЕ называть партнёров — говорить «местное производство», если это не DAFNA!"},
+{icon:"🧹",title:"Уход за тканями дивана",text:"ЖАККАРД/ГОБЕЛЕН: щётка + пылесос, при загрязнении — влажная губка и нейтральные средства, стирка вручную при 40° без отжима. ВЕЛЮР/МИКРОВЕЛЮР: не тереть, промокать, холодная вода или спецсредство. ФЛОК: устойчив к когтям — отличный выбор при животных! КОЖА: влажная тряпка ежедневно, спецсредство раз в полгода. НЕЛЬЗЯ: агрессивные средства, растворители, высокая температура."}],
+facts:[{k:"Каркас",v:"Массив, 200кг/м²"},{k:"Поролон",v:"Плотность 22 (КЗ)"},{k:"Ткань",v:"Российского производства"},{k:"Гарантия",v:"1 год + тех.обслуживание"}]}},
+{id:"4b",title:"Выбор дивана: вопросы и механизмы",time:"10 мин",img:IMGS.sofa,content:{
+desc:"Правильные вопросы при выборе дивана помогают точно подобрать модель и избежать возвратов.",
+secs:[
+{icon:"❓",title:"Вопросы при выборе дивана",text:"«В офис или домой?» В ОФИС: цвет, дизайн кабинета, обивка, размер кабинета, одно кресло или два, на ножках или нет. ДОМОЙ: цвет, дизайн, спать на диване?, раскладной?, место для белья?, на ножках или без?, два кресла или одно?, ЕСТЬ ЛИ ДОМА ЖИВОТНЫЕ? (критически важно для выбора ткани!). При заказе: жёсткие/мягкие подлокотники, цельные/со вставками."},
+{icon:"🔧",title:"Механизмы раскладывания",text:"Обязательно показывать как открывается! Дать клиенту самому попробовать. ЕВРОКНИЖКА — самый распространённый, раскладывается вперёд. АККОРДЕОН — «гармошкой», компактный. ДЕЛЬФИН — секция выдвигается вперёд и вниз. КЛИК-КЛЯК — спинка фиксируется в нескольких положениях. Обратить внимание: качество изнутри, швы, наполнитель, возможность комбинации тканей."},
+{icon:"🎨",title:"Типы диванов",text:"УГЛОВОЙ — максимальное использование угла, для больших гостиных и семей. МОДУЛЬНЫЙ — гибкость, можно менять конфигурацию. ПРЯМОЙ — классика, для небольших помещений. ДИВАН-КРОВАТЬ — функциональность, для гостей. При допродаже к дивану: подушки, журнальный столик, декор, кресла, стеллажи, пледы, цветы."}],
+facts:[{k:"Ключевой вопрос",v:"Есть ли животные?"},{k:"Показать",v:"механизм открытия"},{k:"Дать",v:"клиенту попробовать"},{k:"Замер",v:"выезжаем бесплатно"}]}},
+{id:"4c",title:"Сроки и уход",time:"8 мин",img:IMGS.sofa,content:{
+desc:"Чёткие ответы про уход и сроки снимают сомнения и ускоряют решение о покупке.",
+secs:[
+{icon:"⏱️",title:"Сроки производства",text:"Срок изготовления мягкой мебели на заказ — в среднем 15 дней. Тщательный контроль каждого этапа. ГАРАНТИЯ 1 год с момента покупки. При сложных поломках — мебель забирается, ремонтируется, возвращается. Постгарантийное техническое обслуживание. ВАЖНО: при изменении сроков НЕМЕДЛЕННО звонить клиенту и объяснять доброжелательно — не ждать пока он позвонит сам!"},
+{icon:"🧹",title:"Правила ухода кратко",text:"ПЫЛЕСОС: регулярно, мягкая насадка, не максимальные обороты. ПЯТНО: действовать немедленно — холодная вода или спецсредство. Никогда не тереть — только промокать. ЗАПРЕЩЕНО: агрессивные средства, растворители (бензин, ацетон), стирка при высокой температуре, сушка у батареи и на солнце."},
+{icon:"🎁",title:"Бесплатный замер — конкурентное преимущество",text:"«Если Вы не знаете размеры помещения куда будет устанавливаться мебель — мы можем выехать и замерить БЕСПЛАТНО, и потом сделать предложение под Ваши замеры, цвет и дизайн помещения». Это снимает барьер «не знаю что выбрать» и создаёт персональное предложение. Используйте этот аргумент активно!"}],
+facts:[{k:"Срок производства",v:"~15 дней"},{k:"Гарантия",v:"1 год"},{k:"Бесплатно",v:"выезд на замер"},{k:"При изменении сроков",v:"звонить клиенту сразу"}]}}],
 quiz:[
-{q:"Почему нельзя называть партнёров-производителей?",opts:["Коммерческая тайна","Стандарт запрещает — говорим «местное производство»","Клиенту неинтересно","Путает клиента"],a:1,exp:"Стандарт DAFNA: не называть партнёров, говорить «местное производство»."},
-{q:"Клиент: «Видел такое же дешевле». Правильные действия:",opts:["«У нас лучше» и не слушать","Уточнить модель/бренд, при необходимости позвонить","Сразу дать скидку","Согласиться"],a:1,exp:"Уточните: какой бренд, модель. Если аналог — сравните качество. Если тот же — позвоните и проверьте."},
-{q:"Сколько стандартных цветов корпусной мебели DAFNA?",opts:["5","8","10","15"],a:2,exp:"10 стандартных цветов. Стандартная мебель: 8–10 дней, нестандартная: 12–15 дней."},
-{q:"Гарантия на механизмы Hettich?",opts:["1 год","3 года","6–8 лет","12–15 лет"],a:3,exp:"Hettich — мировой лидер, гарантия 12–15 лет. Тихое закрытие благодаря доводчикам."},
-{q:"Если товара нет в наличии — что делать?",opts:["Попрощаться","Показать на инфостенде с возможностью заказа","Предложить другой","Сказать «Нет»"],a:1,exp:"Обратиться к инфостенду и показать товар на сайте с возможностью заказать."}]},
+{q:"Из чего каркас мягкой мебели DAFNA?",opts:["Из металла","Из МДФ","Из массива дерева, до 200кг/м²","Из фанеры"],a:2,exp:"Каркас — массив дерева (дуб, орех, ясень, сосна). До 200 кг/м² нагрузки. Гарантия прочности."},
+{q:"Какой вопрос важнее всего при выборе дивана?",opts:["«Какой цвет?»","«Какой бюджет?»","«Есть ли дома животные?»","«Нужен ли раскладной?»"],a:2,exp:"Наличие животных критично для выбора ткани — флок и экокожа устойчивы к когтям, велюр — нет."},
+{q:"Срок изготовления мягкой мебели на заказ:",opts:["3–5 дней","8–10 дней","~15 дней","От 30 дней"],a:2,exp:"Срок — в среднем 15 дней. Тщательный контроль каждого этапа производства."}]},
 
-{id:5,title:"Допродажи и завершение",icon:"🏆",time:"40 мин",
+{id:5,title:"Корпусная мебель и AIKO",icon:"🗄️",time:"40 мин",
 lessons:[
-{id:"5a",title:"Матрица допродаж DAFNA",time:"10 мин",content:{
-desc:"Допродажа увеличивает чек без дополнительных усилий. Предлагать ПОСЛЕ согласия на основную покупку.",
-secs:[{icon:"➕",title:"Матрица допродаж",text:"ДИВАН → подушки, журнальный столик, декор, кресла, стеллажи, цветы. ОФИСНАЯ МЕБЕЛЬ → кресло руководителя, кресла посетителей (2–4), столик, декор, вешалка «Джентльмен», металлические шкафы. КРЕСЛО ДИРЕКТОРА → посетительские кресла от 2 шт. HORECA → столы, цветы, декоры."},{icon:"⚠️",title:"4 ошибки при допродаже",text:"1. Вообще не думает о допродаже. 2. Неаргументированное предложение. 3. Предлагает ДО согласия. 4. Предлагает неуверенно. Решение: думать во время продажи, предлагать СРАЗУ ПОСЛЕ согласия, аргументировать выгодой."}],
-facts:[{k:"Момент",v:"После согласия"},{k:"К дивану",v:"столик + подушки"},{k:"К офис. мебели",v:"кресла + декор"},{k:"Ошибка №1",v:"Не думать об этом"}]}},
-{id:"5b",title:"Завершение продажи",time:"8 мин",content:{
-desc:"Последнее впечатление так же важно как первое.",
-secs:[{icon:"🛒",title:"Оформление заказа",text:"Фиксируем в 1С ERP. ФИО, несколько телефонов, полный перечень товаров. Подпись клиента обязательна."},{icon:"🚪",title:"Завершение без покупки",text:"1. Итоги (до 5 предложений). 2. Следующие шаги. 3. Взять контакты. 4. Буклет с визиткой. 5. Напомнить имя. 6. Рассказать об акциях. 7. Доброжелательное прощание. Довольный клиент рекомендует 2–3 знакомым!"}],
-facts:[{k:"Система",v:"1С ERP"},{k:"Обязательно",v:"подпись клиента"},{k:"При уходе",v:"буклет + визитка"},{k:"Рекомендации",v:"2–3 знакомых"}]}}],
+{id:"5a",title:"Материалы корпусной мебели",time:"12 мин",img:IMGS.corpus,content:{
+desc:"Корпусная мебель из жёстких плитных материалов. Знание материалов — ключ к убедительной презентации.",
+secs:[
+{icon:"🪵",title:"МДФ и ДСП",text:"МДФ (Medium Density Fiberboard): мелкие опилки, спрессованные под давлением. Толщина 4–22мм. ПЛЮСЫ: экологичность, ровная поверхность для фрезеровки, влагостойкость до 80%. Для фасадов и декора. МДФ vs ДСП: МДФ однороднее — как миксер vs мясорубка. ДСП (ЛДСП): прессованные стружки, ламинированные меламином. Основной материал мебели. Экологичный класс Е1 — норма. ВАЖНО: ДСП класса Е2 нельзя для детской мебели!"},
+{icon:"📦",title:"Кромка и фурнитура DAFNA",text:"КРОМКА ПВХ/АБС: защита торцов от влаги и ультрафиолета. DAFNA использует импортный клей — надёжное покрытие, кромка не отходит. ЛАМИНАТ Kronospan (Россия/Европа): крупнейший в Европе, высокая влагостойкость, широкая палитра. ВСЯ МЕБЕЛЬ на немецком оборудовании — точность деталей. ФУРНИТУРА Hettich (Германия): мировой лидер, доводчики, направляющие, петли, гарантия 12–15 лет. Тихое закрытие. Китайские механизмы: 1 год, нет доводчиков, дешевле."},
+{icon:"📐",title:"Ассортимент и сроки",text:"Столы (офисные, компьютерные, обеденные, журнальные), комоды и тумбы, кровати, шкафы и шкафы-купе, прихожие, гостиные (горки, стенки), спальни, офисная мебель, кухни. СРОКИ: стандарт 8–10 рабочих дней, нестандарт 12–15. 10 СТАНДАРТНЫХ ЦВЕТОВ в базовой палитре. При отсутствии товара — показать на инфостенде с возможностью заказа."}],
+facts:[{k:"Ламинат",v:"Kronospan (Россия/Европа)"},{k:"Фурнитура",v:"Hettich, 12–15 лет"},{k:"Оборудование",v:"Немецкое"},{k:"Экол. класс",v:"Е1 (норма)"}]}},
+{id:"5b",title:"Бренд AIKO: экоротанг",time:"10 мин",img:IMGS.aiko,content:{
+desc:"AIKO — стратегический партнёр DAFNA. Первая компания в СНГ по ротангу с 2008 года.",
+secs:[
+{icon:"🌿",title:"История и факты AIKO",text:"На рынке с 2008 года. Специализация: ЭКОРОТАНГ, стили Лофт и Хайтек. ПЕРВАЯ КОМПАНИЯ В СНГ по плетёной мебели из ротанга. Экспортёр. Представительства: Россия, Казахстан, Таджикистан, весь Узбекистан. Мебель AIKO в: Radisson (Ташкент), Hilton, Amirsoy и многих заведениях. Сертификат ISO 9001-2015 — Европейский стандарт качества."},
+{icon:"⭐",title:"Преимущества для продажи",text:"НЕ используется вторичное сырьё — качество каждого изделия гарантировано. РУЧНАЯ РАБОТА + новейшие технологии. МНОГОКРАТНЫЙ контроль каждого этапа. Решения для офиса И дома. ГАРАНТИЯ 1 год: металл не сломается, не прогнётся, ламинат, кромка и краска не отойдут."},
+{icon:"🗣️",title:"Скрипт ответа на «Что за бренд AIKO?»",text:"«Компания AIKO существует с 2008 года. Это первая и единственная компания в СНГ которая освоила производство плетёной мебели из ротанга. Они являются экспортёром — продукция поставляется в разные страны. Есть европейский сертификат качества ISO 9001. Мебель AIKO стоит в Radisson, Hilton и Amirsoy — лучших заведениях Ташкента.» Всегда предлагайте клиенту потрогать и попробовать."}],
+facts:[{k:"На рынке",v:"с 2008 года"},{k:"Стили",v:"Лофт, Хайтек, Ротанг"},{k:"Сертификат",v:"ISO 9001-2015"},{k:"Клиенты",v:"Radisson, Hilton, Amirsoy"}]}}],
 quiz:[
-{q:"Когда предлагать допродажу?",opts:["В начале разговора","Во время презентации","Сразу ПОСЛЕ согласия на основную покупку","В конце у кассы"],a:2,exp:"Допродажа — ПОСЛЕ согласия. Клиент в режиме «да», бюджет задействован."},
-{q:"Что обязательно взять при оформлении?",opts:["Только имя","ФИО, несколько телефонов, перечень товаров и подпись","Паспортные данные","Только телефон"],a:1,exp:"В 1С ERP: ФИО, несколько телефонов, полный перечень. Подпись клиента обязательна."},
-{q:"Что делать если клиент уходит без покупки?",opts:["Попрощаться","Подвести итоги, взять контакты, дать буклет с визиткой","Уговаривать","Ничего"],a:1,exp:"Итоги → следующие шаги → контакты → буклет + визитка → имя → акции → прощание."},
-{q:"Что предложить к офисной мебели?",opts:["Только диваны","Кресла руководителя, посетителей, декор, вешалку «Джентльмен»","Только цветы","Ничего"],a:1,exp:"Матрица DAFNA: кресло руководителя, посетительские (2–4), столик, декор, вешалка, металлические шкафы."},
-{q:"Зачем начинать презентацию с дорогих моделей?",opts:["Они красивее","Фокусирует на премиальном сегменте и повышает средний чек","Дешёвые хуже выглядят","Только дорогие качественные"],a:1,exp:"Клиент «якорится» на первой цене — пусть это будет высокая."}]}
+{q:"Что такое ЛДСП?",opts:["Лёгкая деревянная строительная плита","Ламинированная древесно-стружечная плита","Листовая доска со шпоном","Лакированная ДСП"],a:1,exp:"ЛДСП — ламинированная ДСП. Меламиновая бумага прессуется на ДСП. Основной материал мебели."},
+{q:"Гарантия на механизмы Hettich:",opts:["1 год","3 года","6–8 лет","12–15 лет"],a:3,exp:"Hettich — мировой лидер фурнитуры. Гарантия 12–15 лет. Тихое закрытие благодаря доводчикам."},
+{q:"Где стоит мебель AIKO в Ташкенте?",opts:["В торговых центрах","В Radisson, Hilton и Amirsoy","В госучреждениях","Только в жилых домах"],a:1,exp:"AIKO установлена в Radisson, Hilton, Amirsoy — лучших заведениях Ташкента. Сильный аргумент при продаже."}]},
+
+{id:6,title:"Презентация и возражения",icon:"🎯",time:"50 мин",
+lessons:[
+{id:"6a",title:"Формула ХПВ — презентация товара",time:"12 мин",img:IMGS.objections,content:{
+desc:"Клиент покупает не свойства — он покупает ВЫГОДУ. Преимущество становится выгодой только когда совпадает с потребностью клиента.",
+secs:[
+{icon:"💡",title:"Формула ХПВ",text:"Х — ХАРАКТЕРИСТИКА: «В этом диване независимые пружины». П — ПРЕИМУЩЕСТВО: «Они работают автономно, каждая независимо». В — ВЫГОДА: «Поэтому Вы не будете будить партнёра когда встаёте ночью». Выгода ВСЕГДА персонализирована под конкретного клиента! Начинайте с ДОРОГИХ моделей — это «якорит» клиента на высоком ценовом уровне. Дайте клиенту самому потрогать и попробовать товар."},
+{icon:"🪑",title:"При презентации кресел",text:"Дать клиенту сесть в кресло. Показать регулировки: высота, наклон спинки, подлокотники. Объяснить механизм: «Нажмите сюда — видите как спинка и сиденье двигаются вместе? Это синхромеханизм — позвоночник всегда поддерживается». Для руководителя: акцент на статус, натуральная кожа, подголовник. Для сотрудников: акцент на эргономику и долговечность."},
+{icon:"🛋️",title:"При презентации мягкой мебели",text:"Показать как мебель открывается. Дать клиенту самому посидеть и открыть. Объяснить механизм раскладывания. Показать качество изнутри — каркас, наполнитель, швы. Рассказать о ткани и возможности комбинации. ЗАПРЕЩЕНО при презентации: показывать на товар пальцами, говорить «Я не знаю», давать непроверенную информацию, оценивать товар «хороший/плохой»."}],
+facts:[{k:"Формула",v:"Х → П → В"},{k:"Выгода",v:"всегда персональная"},{k:"Начало",v:"с дорогих моделей"},{k:"Дать",v:"клиенту потрогать"}]}},
+{id:"6b",title:"Работа с возражениями — все скрипты",time:"15 мин",img:IMGS.objections,content:{
+desc:"Возражение — НЕ отказ. Это запрос на информацию. Клиент готов купить, но есть «но». Снять его — ваша задача.",
+secs:[
+{icon:"💰",title:"«Дорого» — полный скрипт",text:"Шаг 1: «Скажите, а с чем Вы сравниваете?». АНАЛОГ другого бренда: «Многие модели похожи внешне. Разница в цене обычно объясняется разницей в качестве. А те модели — такие же качественные?». ТОТ ЖЕ бренд дешевле: позвоните и проверьте наличие. «Просто дорого»: «В какой бюджет хотели бы уложиться?» → показать аналог. КОНКУРЕНТЫ: DAFNA проводила анализ — цены на 15–20% ниже рынка на мягкую мебель и кресла."},
+{icon:"🏪",title:"Все типичные возражения",text:"«Китайский товар плохой»: «Понимаю. Китай сегодня — мировой лидер. Мы работаем только с заводами-экспортёрами в Европу. 10+ лет продаём, тысячи клиентов». «Мало ассортимента»: «На Джами у нас флагман с максимальным выбором. Давайте подойдём к инфостенду». «Долго доставка»: «Есть экспресс-доставка — куда доставить?». «Почему не продаёте с витрины?»: «Это выставочный образец. Отправим новый со склада в упаковке»."},
+{icon:"🛡️",title:"Правила работы с возражениями",text:"НЕЛЬЗЯ: спорить с клиентом, начинать ответ со слова «НЕТ», говорить «Я не знаю». При конфликте использовать только «ДА»: «Да, мы решим эту проблему», «Да, мы понимаем». Нет информации — «Одну минуту, уточню у менеджера». Серьёзная жалоба — «Я приглашу менеджера, мы решим ситуацию». Важнее ПРЕДОТВРАЩАТЬ возражения чем бороться с ними!"}],
+facts:[{k:"Правило №1",v:"Не спорить!"},{k:"Правило №2",v:"Не начинать с «Нет»"},{k:"При «дорого»",v:"уточнить сравнение"},{k:"Цены DAFNA",v:"на 15–20% ниже рынка"}],
+warn:"Важнее ПРЕДОТВРАЩАТЬ возражения. При изменении сроков — звонить клиенту НЕМЕДЛЕННО и объяснять доброжелательно."}}],
+quiz:[
+{q:"Что означает формула ХПВ?",opts:["Хороший Продукт Всегда","Характеристика — Преимущество — Выгода","Цена — Прибыль — Выручка","Честность — Профессионализм — Вежливость"],a:1,exp:"ХПВ: Характеристика → Преимущество → Выгода. Выгода всегда персонализирована под клиента."},
+{q:"Клиент: «В другом магазине дешевле». Первый шаг:",opts:["«Там плохое качество»","«Скажите, с чем сравниваете? Какую модель смотрели?»","«Мы не делаем скидки»","«Покупайте там»"],a:1,exp:"Сначала уточнить — что именно и где видели. Аналог или тот же бренд? DAFNA: цены на 15–20% ниже рынка."},
+{q:"Возражение клиента — это:",opts:["Признак что не купит","Запрос на информацию, клиент хочет купить но есть «но»","Сигнал заканчивать разговор","Повод дать скидку"],a:1,exp:"Возражение — НЕ отказ! Клиент ведёт диалог, он не уходит. Хочет быть уверен что покупает лучшее."}]},
+
+{id:7,title:"Жалобы и сервис",icon:"🌟",time:"35 мин",
+lessons:[
+{id:"7a",title:"Работа с жалобами клиентов",time:"12 мин",img:IMGS.complaints,content:{
+desc:"Жалоба — не катастрофа, а шанс. Правильная работа превращает недовольного клиента в лояльного навсегда.",
+secs:[
+{icon:"💎",title:"3 принципа работы с жалобами",text:"ПРИНЦИП 1 — ВОСПРИНИМАТЬ КАК ПОДАРОК: жалоба — ценная обратная связь. Нельзя отбирать у клиента право жаловаться. ПРИНЦИП 2 — ПРИЗНАНИЕ ОШИБОК: быстрые искренние извинения повышают доверие. «Извините, учтём Ваши пожелания для улучшения». ПРИНЦИП 3 — НЕ ОБВИНЯТЬ КЛИЕНТА: задача — решить проблему с минимальными потерями, не устанавливать кто прав."},
+{icon:"📋",title:"7 шагов алгоритма работы с жалобой",text:"1. ВЫСЛУШАТЬ — не перебивать, дать выговориться. 2. ПРИЗНАТЬ ПРОБЛЕМУ — «Я понимаю, как это неприятно». 3. ИЗВИНИТЬСЯ — искренне. 4. УТОЧНИТЬ — понять суть. 5. ПРЕДЛОЖИТЬ РЕШЕНИЕ — в рамках регламента. 6. СОГЛАСОВАТЬ СРОК — конкретная дата. 7. ВЫПОЛНИТЬ И ПРОВЕРИТЬ — позвонить после решения. Жалоба = шанс удержать клиента навсегда!"},
+{icon:"⚡",title:"Скрипты при конфликте",text:"При недовольстве: «Да, мы решим» / «Да, мы понимаем». ЗАПРЕЩЕНО: «Я не знаю», «Нет», «Это не моя работа». Нет информации: «Одну минуту, уточню у менеджера». Серьёзная жалоба: «Одну минуту. Я приглашу менеджера». О выручке/плане: «Я не имею права разглашать. Обратитесь в офис компании». ПОМНИТЕ: наиболее трудные клиенты — те кто уходит МОЛЧА."}],
+facts:[{k:"Жалоба — это",v:"шанс стать лучше"},{k:"Алгоритм",v:"7 шагов"},{k:"Нельзя говорить",v:"«Нет», «Не знаю»"},{k:"Опасный клиент",v:"тот кто молчит"}]}},
+{id:"7b",title:"Сервис который продаёт",time:"10 мин",img:IMGS.closing,content:{
+desc:"Сервис — это создание опыта при котором клиент хочет вернуться и рекомендовать вас другим.",
+secs:[
+{icon:"🌟",title:"Что значит великолепный сервис",text:"«Если вы не удовлетворите клиента — это сделает ваш конкурент». Довольный клиент порекомендует вас 2–3 знакомым. Недовольный расскажет 10–15 людям о плохом опыте. Вежливость и гостеприимство: умение слушать, доброта и терпение, внимание к деталям, помнить что каждый клиент уникален. Предлагайте помощь когда видите что клиент может в ней нуждаться — не ждите пока попросят."},
+{icon:"✅",title:"Чеклист увеличения продаж",text:"✓ Улыбаться клиентам! ✓ Соблюдать стандарты внешнего вида. ✓ Выявлять потребности — задавать вопросы! ✓ Поддерживать чистоту и атмосферу. ✓ Раздавать флаеры и визитки. ✓ Работать с прорабами и дизайнерами. ✓ Презентовать на ВЫГОДАХ. ✓ Мониторить конкурентов. ✓ Соблюдать сроки доставки. ✓ Делать допродажи. ✓ Постоянно повышать знание продукта."},
+{icon:"🏆",title:"Начало и конец встречи с клиентом",text:"НАЧАЛО: вежливое приветствие, улыбка, зрительный контакт, дать осмотреться 1–2 минуты. ВЕДЕНИЕ: активное слушание, уточняющие вопросы, профессиональные ответы. ЗАВЕРШЕНИЕ БЕЗ ПОКУПКИ: итоги до 5 предложений → следующие шаги → взять контакты → буклет с визиткой → напомнить имя → об акциях → доброжелательное прощание. Постоянно настраиваться на продажу — если «подумаю», быть настойчивым!"}],
+facts:[{k:"Рекомендации довольного",v:"2–3 знакомых"},{k:"Жалоб недовольного",v:"10–15 людей"},{k:"Главное",v:"Улыбка + Вопросы"},{k:"Девиз",v:"Сервис который продаёт"}]}}],
+quiz:[
+{q:"Как воспринимать жалобу клиента?",opts:["Как угрозу репутации","Как ценную обратную связь и шанс стать лучше","Как повод скидки","Как неизбежное зло"],a:1,exp:"Жалоба — ценная обратная связь. Правильная работа превращает недовольного в лояльного клиента."},
+{q:"Сколько шагов в алгоритме работы с жалобой?",opts:["3","5","7","10"],a:2,exp:"7 шагов: выслушать → признать → извиниться → уточнить → решение → срок → выполнить и проверить."},
+{q:"Сколько людей узнает о плохом опыте от недовольного клиента?",opts:["1–2","3–5","10–15","Никому"],a:2,exp:"Недовольный расскажет 10–15 людям. Довольный порекомендует 2–3. Именно поэтому работа с жалобами критически важна."}]},
+
+{id:8,title:"Допродажи и завершение",icon:"💰",time:"35 мин",
+lessons:[
+{id:"8a",title:"Дополнительные продажи",time:"10 мин",img:IMGS.upsell,content:{
+desc:"Допродажа увеличивает средний чек на 25–40% без затрат на привлечение клиента. Предлагать ПОСЛЕ согласия на основную покупку.",
+secs:[
+{icon:"➕",title:"Матрица допродаж DAFNA",text:"ДИВАН → подушки, журнальный столик, декор, кресла, стеллажи, цветы, пледы. ОФИСНАЯ МЕБЕЛЬ → кресло руководителя, кресла посетителей (2–4 шт.), столик, декор, книги, вешалка «Джентльмен», металлические шкафы. КРЕСЛО ДИРЕКТОРА → кресла посетителей от 2 шт., массажное кресло. КРЕСЛА HORECA → столы, цветы, декоры. КРЕСЛА В ОФИС → вешалки отдельностоящие."},
+{icon:"⚠️",title:"4 ошибки при допродаже",text:"ОШИБКА 1 — не думает о допродаже вообще (самая частая!). ОШИБКА 2 — неаргументированное предложение: «Возьмите ещё подушки». ОШИБКА 3 — предлагает ДО согласия на основной товар. ОШИБКА 4 — предлагает неуверенно. РЕШЕНИЕ: думать ВО ВРЕМЯ основной продажи, предлагать ПОСЛЕ согласия, аргументировать выгодой."},
+{icon:"💡",title:"Как правильно предлагать",text:"Во время продажи думайте: «Что ещё полезно этому покупателю?», «Что нужно чтобы покупка была максимально полезной?». После согласия: «К этому дивану часто берут журнальный столик — смотрится гармонично и очень удобно. У нас есть несколько вариантов — хотите покажу?». Уверенно, с аргументом, с конкретным предложением."}],
+facts:[{k:"Рост чека",v:"+25–40%"},{k:"Момент",v:"после согласия"},{k:"К дивану",v:"столик + подушки"},{k:"К директорскому",v:"кресла посетителей"}]}},
+{id:"8b",title:"Завершение продажи",time:"8 мин",img:IMGS.closing,content:{
+desc:"Последнее впечатление запоминается так же хорошо как первое. Даже без покупки — клиент уходит с позитивом и визиткой.",
+secs:[
+{icon:"🛒",title:"Оформление заказа — 1С ERP",text:"Фиксировать в планшете в 1С ERP. Если нет — записать и передать оператору. Обязательно: ФИО клиента, НЕСКОЛЬКО номеров телефона (для доставки!), полный перечень товаров с артикулами, цветами, размерами. ПОДПИСЬ клиента — обязательна. Оператор или консультант готовит заказ."},
+{icon:"🚪",title:"7 шагов завершения без покупки",text:"1. Итоги разговора до 5 предложений — что понравилось. 2. Следующие шаги. 3. Взять контакты. 4. Дать буклет с визиткой. 5. Напомнить своё имя. 6. Рассказать о текущих акциях. 7. Доброжелательно попрощаться. Довольный клиент рекомендует вас 2–3 знакомым. Быть настойчивым — если «подумаю», продолжать работу!"},
+{icon:"📞",title:"Постпродажный контакт",text:"Через 3–5 дней после доставки: «Здравствуйте, это [имя] из DAFNA. Хотел убедиться что всё в порядке — Вас всё устраивает?». Это повышает лояльность, открывает рекомендации, помогает выявить проблемы до эскалации. При проблеме — решить немедленно по алгоритму жалоб. Через 6–12 месяцев — напомнить об акциях и новинках."}],
+facts:[{k:"Система",v:"1С ERP"},{k:"Обязательно",v:"подпись клиента"},{k:"При уходе",v:"буклет + визитка"},{k:"Постзвонок",v:"через 3–5 дней"}]}}],
+quiz:[
+{q:"Когда предлагать допродажу?",opts:["В начале разговора","Во время презентации","Сразу ПОСЛЕ согласия на основную покупку","В конце у кассы"],a:2,exp:"Допродажа — ПОСЛЕ согласия. Клиент в режиме «да». Воспринимается как забота, а не давление."},
+{q:"Что обязательно при оформлении заказа?",opts:["Только имя","ФИО, несколько телефонов, перечень и подпись","Паспортные данные","Только контакт"],a:1,exp:"В 1С ERP: ФИО, НЕСКОЛЬКО телефонов (для доставки!), полный перечень. Подпись клиента обязательна."},
+{q:"Через сколько дней звонить после доставки?",opts:["В день доставки","3–5 дней","2 недели","Только если позвонят"],a:1,exp:"Постпродажный звонок через 3–5 дней. Показывает заботу и открывает рекомендации."}]},
+
+{id:9,title:"ФИНАЛЬНЫЙ ТЕСТ",icon:"🏆",time:"20 мин",isFinal:true,
+lessons:[
+{id:"9a",title:"Подготовка к итоговому тесту",time:"10 мин",img:IMGS.closing,content:{
+desc:"Вы прошли все модули Академии DAFNA! Повторите ключевые темы перед финальным тестом.",
+secs:[
+{icon:"📚",title:"Темы для повторения",text:"✓ Цель работы консультанта DAFNA. ✓ Стандарты внешнего вида и 9 запрещённых фраз. ✓ Скрипты 1–7 начала диалога. ✓ Главный вопрос: «Что для Вас самое важное?». ✓ Классы газлифта (1–4) и синхромеханизм. ✓ Каркас дивана (массив, 200кг/м²), поролон плотность 22. ✓ Kronospan, Hettich 12–15 лет, немецкое оборудование. ✓ AIKO: с 2008, ротанг, ISO 9001, Radisson/Hilton. ✓ Формула ХПВ и скрипты возражений. ✓ Матрица допродаж и 7 шагов завершения."},
+{icon:"🎯",title:"Условия финального теста",text:"15 вопросов по всем темам обучения. На каждый вопрос — 30 секунд. Проходной балл: 70% (11 из 15 верных). При результате ниже 70% — повторите модули и попробуйте снова. Успешная сдача открывает раздел Достижений и уведомляет администратора."},
+{icon:"💪",title:"Советы",text:"Читайте вопросы внимательно — ответ в деталях. Исключайте заведомо неверные варианты. 30 секунд на вопрос — не спешите. Доверяйте знаниям полученным в ходе обучения. Удачи — вы готовы стать профессиональным консультантом DAFNA! 🚀"}],
+facts:[{k:"Вопросов",v:"15"},{k:"Время на вопрос",v:"30 секунд"},{k:"Проходной балл",v:"70% (11/15)"},{k:"Темы",v:"Все 8 модулей"}]}}],
+quiz:[]}
+];
+
+const FINAL_QUIZ=[
+{q:"Главная цель работы консультанта DAFNA?",opts:["Красиво оформить зал","Обеспечить максимальный объём продаж создав оптимальные условия для покупателя","Контролировать ценники","Принимать товар"],a:1,exp:"Цель — максимальный объём продаж через оптимальные условия для выбора и оплаты товара."},
+{q:"Через какое время после прихода в компанию можно взять отпуск?",opts:["3 месяца","6 месяцев","1 год","Сразу"],a:1,exp:"Отпуск — только после 6 месяцев. 15 дней, брать 7/7 чтобы была замена."},
+{q:"Стандартная фраза ответа на телефонный звонок в DAFNA?",opts:["Алло, слушаю","Добрый день, мебельный салон DAFNA, [Ваше имя]","DAFNA, чем помочь?","Здравствуйте, говорите"],a:1,exp:"«Добрый день, мебельный салон DAFNA, [имя]». «Алло» — только при потере связи."},
+{q:"Какой класс газлифта — стандарт офисных кресел?",opts:["Класс 1 (до 80кг)","Класс 2 (до 100кг)","Класс 3 (до 150кг)","Класс 4 (до 200кг)"],a:2,exp:"Газлифт класса 3 (2мм, до 150кг) — стандарт офисных кресел. Вращение 360°."},
+{q:"Суть синхромеханизма кресла?",opts:["Вращение 360°","При наклоне спинки меняется угол сиденья 3:1","Высота регулируется газлифтом","Подлокотники двигаются"],a:1,exp:"Синхромеханизм: спинка 3° → сиденье 1°. Позвоночник всегда в контакте. Без него — «табурет»."},
+{q:"Каркас мягкой мебели DAFNA сделан из:",opts:["Металла","МДФ","Массива дерева, до 200кг/м²","Фанеры"],a:2,exp:"Каркас — массив дерева (дуб, орех, ясень, сосна). До 200кг/м². Долговечность гарантирована."},
+{q:"Ламинат для корпусной мебели DAFNA — это:",opts:["Egger (Германия)","Kronospan (Россия/Европа)","Pfleiderer (Польша)","Местного производства"],a:1,exp:"Kronospan — крупнейший производитель в Европе (российское производство). Высокая влагостойкость."},
+{q:"С какого года компания AIKO на рынке?",opts:["С 1995","С 2000","С 2008","С 2015"],a:2,exp:"AIKO с 2008 года. Первая компания в СНГ по ротангу. Сертификат ISO 9001-2015."},
+{q:"Что означает формула ХПВ?",opts:["Хорошо, Правильно, Выгодно","Характеристика — Преимущество — Выгода","Цена — Прибыль — Выручка","Честность — Профессионализм — Вежливость"],a:1,exp:"ХПВ: Характеристика → Преимущество → Выгода. Выгода персонализирована под клиента."},
+{q:"Клиент говорит «Дорого». Первый шаг:",opts:["Дать скидку","«Скажите, а с чем Вы сравниваете?»","Объяснить что качество стоит денег","Показать дешевле"],a:1,exp:"Сначала уточнить сравнение. DAFNA: цены на 15–20% ниже рынка по конкурентному анализу."},
+{q:"Когда предлагать допродажу?",opts:["В начале разговора","Во время презентации","Сразу ПОСЛЕ согласия на основную покупку","У кассы"],a:2,exp:"Допродажа ПОСЛЕ согласия. Клиент в режиме «да». Воспринимается как забота."},
+{q:"Сколько людей узнает о плохом опыте от недовольного клиента?",opts:["1–2","3–5","10–15","Никому"],a:2,exp:"Недовольный расскажет 10–15 людям. Довольный порекомендует 2–3. Работа с жалобами критически важна."},
+{q:"Срок изготовления стандартной корпусной мебели DAFNA:",opts:["3–5 дней","8–10 рабочих дней","15–20 дней","Месяц"],a:1,exp:"Стандартная корпусная мебель: 8–10 рабочих дней. Нестандартная: 12–15 дней."},
+{q:"Что нужно сделать при входе клиента в шоурум?",opts:["Спросить «Вам помочь?»","Встать, выйти навстречу, поздороваться, дать осмотреться 1–2 минуты","Продолжать работу","Позвать старшего"],a:1,exp:"Стандарт DAFNA: встать, выйти навстречу, улыбнуться, поздороваться. Дать 1–2 минуты осмотреться."},
+{q:"Самый важный вопрос при выявлении потребностей?",opts:["«Какой цвет?»","«Какой бюджет?»","«Что для Вас самое важное при выборе?»","«Когда купите?»"],a:2,exp:"«Что для Вас самое важное?» — главный вопрос DAFNA. Ответ определяет всю стратегию."}
 ];
 
 // ─── STATE ───
-const state={done:new Set(),quizzes:{},curLesson:null,curStageId:null,expanded:null,quizState:null,timerInterval:null};
-
-// ─── UTILS ───
+const state={done:new Set(),quizzes:{},finalDone:false,finalScore:0,expanded:null,quizState:null,timerInterval:null};
 function totalL(){return MODULES.reduce((s,m)=>s+m.lessons.length,0);}
-function isUnlocked(idx){if(idx===0)return true;const p=MODULES[idx-1];return p.lessons.every(l=>state.done.has(l.id))&&state.quizzes['q'+p.id]!==undefined;}
+function isUnlocked(idx){
+  if(idx===0)return true;
+  const p=MODULES[idx-1];
+  return p.lessons.every(l=>state.done.has(l.id))&&(p.isFinal||state.quizzes['q'+p.id]!==undefined);
+}
 function quizOk(id){return MODULES.find(m=>m.id===id).lessons.every(l=>state.done.has(l.id));}
-function saveLocal(){localStorage.setItem('dafna_progress',JSON.stringify({done:[...state.done],quizzes:state.quizzes}));}
-function loadLocal(){try{const d=JSON.parse(localStorage.getItem('dafna_progress')||'{}');if(d.done)state.done=new Set(d.done);if(d.quizzes)state.quizzes=d.quizzes;}catch(e){}}
+function saveLocal(){localStorage.setItem('dafna_v3',JSON.stringify({done:[...state.done],quizzes:state.quizzes,finalDone:state.finalDone,finalScore:state.finalScore}));}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem('dafna_v3')||'{}');if(d.done)state.done=new Set(d.done);if(d.quizzes)state.quizzes=d.quizzes;if(d.finalDone)state.finalDone=d.finalDone;if(d.finalScore)state.finalScore=d.finalScore;}catch(e){}}
 function sendToBot(data){if(tg&&tg.sendData)try{tg.sendData(JSON.stringify(data));}catch(e){}}
 
 function calcP(){
-  const tot=totalL(),done=state.done.size,qc=Object.keys(state.quizzes).length;
-  const sc=Object.values(state.quizzes);
+  const tot=totalL(),done=state.done.size;
+  const qc=Object.keys(state.quizzes).length+(state.finalDone?1:0);
+  const sc=[...Object.values(state.quizzes)];if(state.finalDone)sc.push(state.finalScore);
   const avg=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):null;
   const pct=Math.round(done/tot*100);
   document.getElementById('pf').style.width=pct+'%';
@@ -336,32 +568,31 @@ function go(name){
   const map={modules:0,learn:1,quiz:2,rating:3,certs:4};
   document.querySelectorAll('.tab')[map[name]].classList.add('on');
   if(name==='rating')renderRating();
+  if(name==='certs')renderCerts();
 }
 
-// ─── CONFETTI ───
 function showConfetti(){
   const wrap=document.createElement('div');wrap.className='confetti-wrap';
-  const colors=['#1A6DB5','#22c55e','#f59e0b','#6366f1','#ec4899','#14b8a6'];
-  for(let i=0;i<60;i++){
+  const colors=['#1A6DB5','#22c55e','#f59e0b','#6366f1','#ec4899'];
+  for(let i=0;i<70;i++){
     const p=document.createElement('div');p.className='confetti-piece';
-    p.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s`;
+    p.style.cssText=`left:${Math.random()*100}%;background:${colors[i%colors.length]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s`;
     wrap.appendChild(p);
   }
   document.body.appendChild(wrap);
   setTimeout(()=>wrap.remove(),5000);
 }
 
-// ─── MODULES ───
 function renderMods(){
   const el=document.getElementById('mod-list');el.innerHTML='';
   MODULES.forEach((m,idx)=>{
     const ul=isUnlocked(idx);
     const allD=m.lessons.every(l=>state.done.has(l.id));
-    const qD=state.quizzes['q'+m.id]!==undefined;
+    const qD=m.isFinal?state.finalDone:(state.quizzes['q'+m.id]!==undefined);
     const isO=state.expanded===m.id;
     let bc='b-lock',bt='🔒 Заблокировано';
     if(ul&&!allD){bc='b-act';bt='▶ В процессе';}
-    if(allD&&!qD){bc='b-act';bt='📝 Пройти тест';}
+    if(allD&&!qD){bc='b-act';bt=m.isFinal?'🎯 Финальный тест':'📝 Пройти тест';}
     if(allD&&qD){bc='b-done';bt='✓ Завершён';}
     const nc=(allD&&qD)?'n-done':(ul?'n-act':'n-lock');
     const ni=(allD&&qD)?'✓':(idx+1);
@@ -369,7 +600,8 @@ function renderMods(){
     if(!ul)card.style.opacity='0.55';
     card.innerHTML=`<div class="mod-head" onclick="toggleM(${m.id},${ul?0:1})">
       <div class="mod-num ${nc}">${ni}</div>
-      <div class="mod-inf"><div class="mod-title">${m.icon} ${m.title}</div><div class="mod-meta">${m.lessons.length} урока · ${m.time}</div></div>
+      <div class="mod-inf"><div class="mod-title">${m.icon} ${m.title}</div>
+      <div class="mod-meta">${m.lessons.length} урок · ${m.time}${m.isFinal?' · <strong style="color:#f59e0b">Итоговый</strong>':''}</div></div>
       <span class="mod-badge ${bc}">${bt}</span></div>
     <div class="mod-body ${isO?'open':''}" id="mb-${m.id}">
       <div class="mod-lessons">
@@ -381,50 +613,64 @@ function renderMods(){
             <div class="les-ico ${ic}">${ii}</div>
             <span class="les-name">${l.title}</span><span class="les-time">${l.time}</span></div>`;
         }).join('')}
-        ${quizOk(m.id)?`<div class="les-row" onclick="startQ(${m.id})">
+        ${m.isFinal&&allD?`<div class="les-row" onclick="startFinal()">
+          <div class="les-ico ${state.finalDone?'li-done':'li-act'}">${state.finalDone?'🏆':'🎯'}</div>
+          <span class="les-name" style="font-weight:700;color:${state.finalDone?'#059669':'#d97706'}">${state.finalDone?'Финальный тест пройден!':'🎯 ФИНАЛЬНЫЙ ТЕСТ — все темы'}</span>
+          <span class="les-time" style="${state.finalDone?'color:#059669;font-weight:700':''}">${state.finalDone?state.finalScore+'%':'15 вопр.'}</span></div>`:
+        (!m.isFinal&&quizOk(m.id)?`<div class="les-row" onclick="startQ(${m.id})">
           <div class="les-ico ${qD?'li-done':'li-act'}">${qD?'✓':'📝'}</div>
-          <span class="les-name" style="font-weight:700">Тест по модулю ${qD?'(пройден — повторить)':''}</span>
-          <span class="les-time" style="${qD?'color:#059669;font-weight:700':''}">${qD?state.quizzes['q'+m.id]+'%':'5 вопр.'}</span></div>`:''}
+          <span class="les-name" style="font-weight:600">Тест по модулю ${qD?'(пройден)':''}</span>
+          <span class="les-time" style="${qD?'color:#059669;font-weight:700':''}">${qD?state.quizzes['q'+m.id]+'%':'3 вопр.'}</span></div>`:'')}
       </div></div>`;
     el.appendChild(card);
   });
 }
 function toggleM(id,locked){if(locked)return;state.expanded=state.expanded===id?null:id;renderMods();}
 
-// ─── LESSON ───
 function openL(lid,mid){
   const m=MODULES.find(x=>x.id===mid);const l=m.lessons.find(x=>x.id===lid);
-  state.curLesson=l;state.curStageId=mid;const c=l.content;
-  let h=`<button class="back-btn" onclick="go('modules')">← К модулям</button>
-  <div class="les-title">${l.title}</div><div class="les-desc">${c.desc}</div>`;
+  const c=l.content;
+  let h=`<button class="back-btn" onclick="go('modules')">← К модулям</button>`;
+  if(l.img)h+=`<div class="img-card"><img src="${l.img}" alt="${l.title}" onerror="this.style.display='none'"><div class="img-card-label">${m.icon} ${l.title}</div></div>`;
+  h+=`<div class="les-title">${l.title}</div><div class="les-desc">${c.desc}</div>`;
   if(c.warn)h+=`<div class="warn-box">⚠️ <strong>Важно:</strong> ${c.warn}</div>`;
   c.secs.forEach(s=>{h+=`<div class="csec"><h3>${s.icon} ${s.title}</h3><p>${s.text}</p></div>`;});
   h+=`<div class="csec"><h3>📌 Ключевые факты</h3><div class="kfacts">${c.facts.map(f=>`<div class="kf"><strong>${f.k}</strong><span>${f.v}</span></div>`).join('')}</div></div>`;
   const isDone=state.done.has(lid);
   h+=`<button class="done-btn" id="db-${lid}" ${isDone?'disabled':''} onclick="markD('${lid}',${mid})">${isDone?'✓ Урок пройден!':'✅ Отметить как пройденный'}</button>`;
-  document.getElementById('les-content').innerHTML=h;go('learn');
-  window.scrollTo(0,0);
+  document.getElementById('les-content').innerHTML=h;
+  go('learn');window.scrollTo(0,0);
 }
 function markD(lid,mid){
-  state.done.add(lid);saveLocal();calcP();renderMods();renderCerts();
+  state.done.add(lid);saveLocal();calcP();renderMods();
   const db=document.getElementById('db-'+lid);
   if(db){db.disabled=true;db.textContent='✓ Урок пройден!';}
   sendToBot({action:'lesson_done',module_id:mid,lesson_id:lid});
-  if(quizOk(mid)&&!document.getElementById('quiz-prompt')){
+  const m=MODULES.find(x=>x.id===mid);
+  if(!m.isFinal&&quizOk(mid)&&!document.getElementById('quiz-prompt')){
     const b=document.createElement('button');b.id='quiz-prompt';b.className='done-btn';
     b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#059669,#047857)';
-    b.textContent='📝 Все уроки пройдены — пройти тест!';
-    b.onclick=()=>startQ(mid);
+    b.textContent='📝 Пройти тест по модулю →';b.onclick=()=>startQ(mid);
+    document.getElementById('les-content').appendChild(b);
+  }
+  if(m.isFinal&&quizOk(mid)&&!document.getElementById('final-prompt')){
+    const b=document.createElement('button');b.id='final-prompt';b.className='done-btn';
+    b.style.cssText='margin-top:10px;background:linear-gradient(135deg,#f59e0b,#d97706)';
+    b.textContent='🎯 Пройти ФИНАЛЬНЫЙ ТЕСТ →';b.onclick=()=>startFinal();
     document.getElementById('les-content').appendChild(b);
   }
 }
 
-// ─── QUIZ + TIMER ───
 const QUIZ_TIME=30;
 function startQ(mid){
   const m=MODULES.find(x=>x.id===mid);
   if(state.timerInterval)clearInterval(state.timerInterval);
-  state.quizState={mid,qs:m.quiz,cur:0,ans:[],answered:false,timeLeft:QUIZ_TIME};
+  state.quizState={mid,qs:m.quiz,cur:0,ans:[],answered:false,timeLeft:QUIZ_TIME,isFinal:false};
+  renderQ();go('quiz');
+}
+function startFinal(){
+  if(state.timerInterval)clearInterval(state.timerInterval);
+  state.quizState={mid:'final',qs:FINAL_QUIZ,cur:0,ans:[],answered:false,timeLeft:QUIZ_TIME,isFinal:true};
   renderQ();go('quiz');
 }
 function startTimer(){
@@ -433,19 +679,15 @@ function startTimer(){
     const qs=state.quizState;if(!qs||qs.answered)return;
     qs.timeLeft--;
     const el=document.getElementById('timer-val');
-    if(el){el.textContent=qs.timeLeft;const tw=el.closest('.timer');if(tw){tw.classList.toggle('warn',qs.timeLeft<=10);}}
-    if(qs.timeLeft<=0){
-      clearInterval(state.timerInterval);
-      if(!qs.answered){qs.answered=true;if(qs.ans[qs.cur]===undefined)qs.ans[qs.cur]=-1;renderQ();}
-    }
+    if(el){el.textContent=qs.timeLeft;const tw=el.closest('.timer');if(tw)tw.classList.toggle('warn',qs.timeLeft<=10);}
+    if(qs.timeLeft<=0){clearInterval(state.timerInterval);if(!qs.answered){qs.answered=true;if(qs.ans[qs.cur]===undefined)qs.ans[qs.cur]=-1;renderQ();}}
   },1000);
 }
 function renderQ(){
   const qs=state.quizState;const el=document.getElementById('quiz-content');
   if(!qs){el.innerHTML='<div class="empty"><span class="empty-icon">✅</span><p>Завершите уроки модуля чтобы открыть тест</p></div>';return;}
   if(qs.cur>=qs.qs.length){renderRes();return;}
-  const q=qs.qs[qs.cur];const pct=Math.round(qs.cur/qs.qs.length*100);
-  const L='АБВГ';
+  const q=qs.qs[qs.cur];const pct=Math.round(qs.cur/qs.qs.length*100);const L='АБВГ';
   const opts=q.opts.map((o,i)=>{
     let cls='';
     if(qs.answered){if(i===q.a)cls='ok';else if(i===qs.ans[qs.cur]&&i!==q.a)cls='no';}
@@ -454,109 +696,99 @@ function renderQ(){
       <div class="opt-l">${L[i]}</div><div class="opt-t">${o}</div></div>`;
   }).join('');
   const fb=qs.answered?`<div class="fb ${qs.ans[qs.cur]===q.a?'fb-ok':'fb-no'}"><strong>${qs.ans[qs.cur]===q.a?'✓ Верно!':'✗ Неверно.'}</strong> ${q.exp}</div>`:'';
-  const m=MODULES.find(x=>x.id===qs.mid);
-  const timeColor=qs.timeLeft<=10?'warn':'';
+  const title=qs.isFinal?'🎯 Финальный тест DAFNA':`Тест: ${MODULES.find(x=>x.id===qs.mid)?.title||''}`;
   el.innerHTML=`<button class="back-btn" onclick="go('modules')">← К модулям</button>
-  <div class="q-title">Тест: ${m.title}</div>
+  ${qs.isFinal?'<div class="final-badge"><h3>🏆 Финальный тест по всей программе</h3><p>15 вопросов · 8 модулей · 30 сек на вопрос</p></div>':''}
+  <div class="q-title">${title}</div>
   <div class="qprow"><span>Вопрос ${qs.cur+1} из ${qs.qs.length}</span><span>${pct}% пройдено</span></div>
   <div class="qt"><div class="qf" style="width:${pct}%"></div></div>
-  <div class="timer-wrap"><div class="timer ${timeColor}"><span class="timer-icon">⏱</span><span id="timer-val">${qs.timeLeft}</span><span style="font-size:12px;opacity:.7"> сек</span></div></div>
+  <div class="timer-wrap"><div class="timer"><span>⏱</span><span id="timer-val">${qs.timeLeft}</span><span style="font-size:13px;opacity:.7"> сек</span></div></div>
   <div class="qcard"><div class="qtext">${q.q}</div>${opts}</div>
-  ${fb}<button class="nxt-btn" ${qs.answered?'':'disabled'} onclick="nxtQ()">${qs.cur<qs.qs.length-1?'Следующий вопрос →':'Завершить тест →'}</button>`;
+  ${fb}<button class="nxt-btn" ${qs.answered?'':'disabled'} onclick="nxtQ()">${qs.cur<qs.qs.length-1?'Следующий →':'Завершить тест →'}</button>`;
   if(!qs.answered)startTimer();
 }
-function selA(qi,oi){
-  const qs=state.quizState;if(qs.answered)return;
-  clearInterval(state.timerInterval);
-  qs.ans[qi]=oi;qs.answered=true;renderQ();
-}
-function nxtQ(){
-  const qs=state.quizState;
-  qs.cur++;qs.timeLeft=QUIZ_TIME;qs.answered=qs.ans[qs.cur]!==undefined;renderQ();
-}
+function selA(qi,oi){const qs=state.quizState;if(qs.answered)return;clearInterval(state.timerInterval);qs.ans[qi]=oi;qs.answered=true;renderQ();}
+function nxtQ(){const qs=state.quizState;qs.cur++;qs.timeLeft=QUIZ_TIME;qs.answered=qs.ans[qs.cur]!==undefined;renderQ();}
 function renderRes(){
   if(state.timerInterval)clearInterval(state.timerInterval);
   const qs=state.quizState;
   const correct=qs.qs.filter((q,i)=>qs.ans[i]===q.a).length;
-  const score=Math.round(correct/qs.qs.length*100);const pass=score>=60;
-  state.quizzes['q'+qs.mid]=score;saveLocal();calcP();renderMods();renderCerts();
-  sendToBot({action:'quiz_done',module_id:qs.mid,score:score});
+  const score=Math.round(correct/qs.qs.length*100);
+  const pass=score>=(qs.isFinal?70:60);
+  if(qs.isFinal){state.finalDone=true;state.finalScore=score;}
+  else state.quizzes['q'+qs.mid]=score;
+  saveLocal();calcP();renderMods();
+  sendToBot({action:qs.isFinal?'final_done':'quiz_done',module_id:qs.mid,score});
   if(pass)showConfetti();
-  const m=MODULES.find(x=>x.id===qs.mid);
   const medal=score>=80?'🏆':score>=60?'✅':'📝';
+  const passText=qs.isFinal?(score>=70?'🎉 Поздравляем! Программа обучения пройдена!':'Нужно повторить материал. Порог: 70%'):(score>=60?'Следующий модуль разблокирован!':'Изучите материал и попробуйте снова.');
   document.getElementById('quiz-content').innerHTML=`<button class="back-btn" onclick="go('modules')">← К модулям</button>
   <div class="res-card">
     <div class="res-ring ${pass?'r-pass':'r-fail'}">${medal}</div>
-    <div class="res-t">${score}% — ${pass?'Отлично!':'Попробуйте ещё раз'}</div>
-    <div class="res-m">Правильных ответов: <strong>${correct} из ${qs.qs.length}</strong><br>Модуль: «${m.title}»<br>${pass?'🎉 Следующий модуль разблокирован!':'Изучите материал и попробуйте снова.'}</div>
+    <div class="res-t">${score}% — ${pass?'Отлично!':'Попробуйте снова'}</div>
+    <div class="res-m">Правильных: <strong>${correct} из ${qs.qs.length}</strong><br>${passText}</div>
     <div class="res-acts">
-      <button class="btn-o" onclick="startQ(${qs.mid})">↺ Повторить</button>
+      <button class="btn-o" onclick="${qs.isFinal?'startFinal()':'startQ('+qs.mid+')'}">↺ Повторить</button>
       <button class="btn-p" onclick="go('modules')">К модулям →</button>
     </div></div>`;
 }
 
-// ─── RATING ───
 function renderRating(){
   const el=document.getElementById('rating-content');
-  const myLessons=state.done.size;
-  const myQuizzes=Object.keys(state.quizzes).length;
-  const myScores=Object.values(state.quizzes);
-  const myAvg=myScores.length?Math.round(myScores.reduce((a,b)=>a+b,0)/myScores.length):0;
-  const myPct=Math.round(myLessons/totalL()*100);
-
-  const fakeRating=[
-    {name:"Вы",lessons:myLessons,quizzes:myQuizzes,avg:myAvg,pct:myPct,isMe:true},
-    {name:"Азиза М.",lessons:12,quizzes:4,avg:88,pct:86,isMe:false},
-    {name:"Бобур Т.",lessons:10,quizzes:3,avg:82,pct:71,isMe:false},
-    {name:"Малика Р.",lessons:8,quizzes:3,avg:76,pct:57,isMe:false},
-    {name:"Сардор Н.",lessons:6,quizzes:2,avg:70,pct:43,isMe:false},
+  const myL=state.done.size,myQ=Object.keys(state.quizzes).length+(state.finalDone?1:0);
+  const mySc=[...Object.values(state.quizzes)];if(state.finalDone)mySc.push(state.finalScore);
+  const myAvg=mySc.length?Math.round(mySc.reduce((a,b)=>a+b,0)/mySc.length):0;
+  const myPct=Math.round(myL/totalL()*100);
+  const fake=[
+    {name:"Вы",pct:myPct,avg:myAvg,isMe:true},
+    {name:"Азиза М.",pct:86,avg:88},{name:"Бобур Т.",pct:71,avg:82},
+    {name:"Малика Р.",pct:57,avg:76},{name:"Сардор Н.",pct:43,avg:70},{name:"Камола У.",pct:29,avg:65}
   ];
-  fakeRating.sort((a,b)=>b.pct-a.pct||(b.avg-a.avg));
-  const medals=['🥇','🥈','🥉'];
-  const posClass=['pos-1','pos-2','pos-3'];
-
+  fake.sort((a,b)=>b.pct-a.pct||(b.avg-a.avg));
+  const medals=['🥇','🥈','🥉'];const posClass=['pos-1','pos-2','pos-3'];
   el.innerHTML=`<div class="rating-card">
     <div class="rating-title">🏆 Рейтинг сотрудников</div>
-    <div class="rating-sub">По прогрессу обучения · обновляется в реальном времени</div>
-    ${fakeRating.map((r,i)=>`
-    <div class="rating-item" style="${r.isMe?'background:rgba(26,109,181,.15);border-radius:8px;padding:10px;margin:0 -4px':''}">
+    <div class="rating-sub">По прогрессу обучения</div>
+    ${fake.map((r,i)=>`<div class="rating-item" style="${r.isMe?'background:rgba(26,109,181,.2);border-radius:10px;padding:12px 6px;margin:0 -6px':''}">
       <div class="rating-pos ${i<3?posClass[i]:'pos-other'}">${i<3?medals[i]:i+1}</div>
       <div class="rating-name">${r.name}${r.isMe?' 👈':''}</div>
       <div class="rating-bar-wrap"><div class="rating-bar" style="width:${r.pct}%"></div></div>
-      <div class="rating-score">${r.avg}%</div>
+      <div class="rating-score">${r.avg||0}%</div>
     </div>`).join('')}
   </div>
-  <div style="background:#f8fafc;border-radius:12px;padding:1rem;border:1px solid #e2e8f0;font-size:13px;color:#64748b;line-height:1.7">
-    <strong style="color:#1e293b">📊 Ваша статистика:</strong><br>
-    Уроков пройдено: <strong>${myLessons}/${totalL()}</strong><br>
-    Тестов сдано: <strong>${myQuizzes}/5</strong><br>
-    Средний балл: <strong>${myAvg||'—'}%</strong><br>
-    Общий прогресс: <strong>${myPct}%</strong>
+  <div style="background:#f8fafc;border-radius:14px;padding:1.1rem;border:1px solid #e2e8f0;font-size:15px;color:#374151;line-height:1.8">
+    <strong style="color:#1e293b;font-size:16px">📊 Ваши результаты</strong><br>
+    Уроков: <strong>${myL}/${totalL()}</strong> · Тестов: <strong>${myQ}</strong> · Балл: <strong>${myAvg||'—'}%</strong>
   </div>`;
 }
 
-// ─── CERTS ───
 function renderCerts(){
   const el=document.getElementById('certs-content');
-  const earned=MODULES.filter(m=>state.quizzes['q'+m.id]!==undefined);
-  if(!earned.length){
+  const earned=MODULES.slice(0,-1).filter(m=>state.quizzes['q'+m.id]!==undefined);
+  let html='';
+  if(state.finalDone){
+    html+=`<div style="background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:16px;padding:1.5rem;margin-bottom:1rem;text-align:center;color:#fff">
+      <div style="font-size:48px;margin-bottom:8px">🏆</div>
+      <div style="font-size:18px;font-weight:800">Программа обучения пройдена!</div>
+      <div style="font-size:14px;opacity:.9;margin-top:4px">Финальный тест: ${state.finalScore}%</div>
+    </div>`;
+  }
+  if(!earned.length&&!state.finalDone){
     el.innerHTML='<div class="empty"><span class="empty-icon">🎓</span><p>Сдайте тест по любому модулю чтобы получить достижение</p></div>';return;
   }
-  const total=MODULES.length;
-  el.innerHTML=`<div style="background:linear-gradient(135deg,#dbeafe,#e0e7ff);border-radius:12px;padding:1rem;margin-bottom:1rem;text-align:center">
-    <div style="font-size:32px;margin-bottom:4px">${earned.length===total?'🏆':'🎓'}</div>
-    <div style="font-size:15px;font-weight:700;color:#1e40af">${earned.length} из ${total} модулей завершено</div>
-    <div style="font-size:12px;color:#3730a3;margin-top:4px">${earned.length===total?'Поздравляем! Вы прошли всю программу!':'Продолжайте — вы на верном пути!'}</div>
-  </div>`+
-  earned.map(m=>`<div class="cert">
+  html+=`<div style="background:linear-gradient(135deg,#dbeafe,#e0e7ff);border-radius:14px;padding:1rem;margin-bottom:1rem;text-align:center">
+    <div style="font-size:15px;font-weight:700;color:#1e40af">${earned.length} из ${MODULES.length-1} модулей завершено</div>
+  </div>`;
+  html+=earned.map(m=>`<div class="cert">
     <div class="cert-ico">${m.icon}</div>
-    <div class="cert-info"><div class="cert-n">${m.title}</div><div class="cert-d">Модуль ${m.id} · Завершено</div></div>
+    <div class="cert-info"><div class="cert-n">${m.title}</div><div class="cert-d">Модуль ${m.id} завершён</div></div>
     <div class="cert-s">${state.quizzes['q'+m.id]}%</div>
   </div>`).join('');
+  el.innerHTML=html;
 }
 
-// ─── INIT ───
 loadLocal();calcP();renderMods();renderCerts();
 </script>
-</body>
-</html>
+
+
+</body></html>
