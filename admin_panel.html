@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAFNA Admin Panel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.login-card{background:#1e293b;border-radius:20px;padding:2.5rem;width:100%;max-width:400px;border:1px solid #334155}
+.login-card h1{font-size:24px;font-weight:700;margin-bottom:6px;color:#fff}
+.login-card p{font-size:14px;color:#94a3b8;margin-bottom:2rem}
+.logo{width:56px;height:56px;background:linear-gradient(135deg,#1A6DB5,#0e4d8a);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin-bottom:1.25rem}
+input{width:100%;padding:13px 16px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#fff;font-size:15px;margin-bottom:12px;outline:none}
+input:focus{border-color:#1A6DB5}
+input::placeholder{color:#475569}
+.btn{width:100%;padding:14px;background:linear-gradient(135deg,#1A6DB5,#0e4d8a);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}
+.btn-danger{background:linear-gradient(135deg,#dc2626,#b91c1c)}
+.btn-success{background:linear-gradient(135deg,#059669,#047857)}
+.btn-sm{padding:8px 16px;font-size:13px;border-radius:8px;border:none;color:#fff;cursor:pointer;font-weight:600}
+
+.app{display:none}
+.sidebar{position:fixed;left:0;top:0;width:240px;height:100vh;background:#1e293b;border-right:1px solid #334155;padding:1.5rem;z-index:10}
+.sidebar-logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.sidebar-logo .logo{width:40px;height:40px;font-size:20px;margin:0;border-radius:10px}
+.sidebar-logo span{font-size:16px;font-weight:700;color:#fff}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;color:#94a3b8;font-size:14px;font-weight:500;transition:all .2s;margin-bottom:4px;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:#334155;color:#fff}
+.nav-item.active{background:linear-gradient(135deg,rgba(26,109,181,.3),rgba(14,77,138,.3));color:#93c5fd;border:1px solid rgba(26,109,181,.3)}
+.nav-item span{font-size:18px}
+.main{margin-left:240px;padding:2rem;min-height:100vh}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-size:24px;font-weight:700;color:#fff;margin-bottom:6px}
+.page-sub{font-size:14px;color:#64748b;margin-bottom:2rem}
+
+/* STATS CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:2rem}
+.stat-card{background:#1e293b;border-radius:14px;padding:1.25rem;border:1px solid #334155}
+.stat-card .num{font-size:32px;font-weight:800;color:#fff;margin-bottom:4px}
+.stat-card .lbl{font-size:13px;color:#64748b}
+.stat-card .icon{font-size:24px;margin-bottom:8px}
+
+/* TABLE */
+.table-wrap{background:#1e293b;border-radius:14px;border:1px solid #334155;overflow:hidden;margin-bottom:2rem}
+.table-head{padding:1rem 1.25rem;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between}
+.table-head h3{font-size:16px;font-weight:600;color:#fff}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 16px;text-align:left;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #334155;background:#0f172a}
+td{padding:12px 16px;font-size:13px;color:#e2e8f0;border-bottom:1px solid #1e293b}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:#d1fae5;color:#065f46}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.badge-yellow{background:#fef3c7;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.progress-mini{height:6px;background:#334155;border-radius:3px;overflow:hidden;width:80px}
+.progress-mini-fill{height:100%;background:linear-gradient(90deg,#1A6DB5,#22c55e);border-radius:3px}
+.emp-row{cursor:pointer}
+.emp-row:hover td{background:rgba(26,109,181,.1)!important}
+
+/* DETAIL MODAL */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;padding:2rem}
+.modal.open{display:flex}
+.modal-card{background:#1e293b;border-radius:20px;padding:2rem;max-width:560px;width:100%;border:1px solid #334155;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-head h2{font-size:20px;font-weight:700;color:#fff}
+.close-btn{background:none;border:none;color:#64748b;font-size:24px;cursor:pointer}
+.close-btn:hover{color:#fff}
+.mod-progress-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #334155}
+.mod-progress-item:last-child{border-bottom:none}
+.mod-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.mod-done{background:#d1fae5}
+.mod-partial{background:#fef3c7}
+.mod-none{background:#334155}
+.mod-name{flex:1;font-size:13px;color:#e2e8f0}
+.mod-score{font-size:13px;font-weight:700}
+
+/* PREVIEW */
+.preview-wrap{background:#1e293b;border-radius:14px;border:1px solid #334155;overflow:hidden;margin-bottom:2rem}
+.preview-toolbar{padding:.75rem 1rem;border-bottom:1px solid #334155;display:flex;align-items:center;gap:8px;background:#0f172a}
+.preview-dot{width:12px;height:12px;border-radius:50%}
+.preview-url{flex:1;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:6px 12px;font-size:12px;color:#94a3b8;margin:0 8px}
+iframe{width:100%;height:600px;border:none}
+
+/* PHOTOS */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:2rem}
+.photo-item{background:#1e293b;border-radius:14px;overflow:hidden;border:1px solid #334155;position:relative}
+.photo-item img{width:100%;height:130px;object-fit:cover;display:block}
+.photo-item-info{padding:10px}
+.photo-item-info p{font-size:12px;color:#94a3b8;margin-bottom:8px}
+.photo-item-info strong{font-size:13px;color:#fff;display:block;margin-bottom:4px}
+.upload-zone{border:2px dashed #334155;border-radius:14px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1rem}
+.upload-zone:hover{border-color:#1A6DB5;background:rgba(26,109,181,.05)}
+.upload-zone input{display:none}
+.upload-zone p{font-size:14px;color:#64748b;margin-top:8px}
+.upload-zone .icon{font-size:36px;margin-bottom:8px}
+.photo-replace-form{padding:1rem;border-top:1px solid #334155}
+.select-styled{width:100%;padding:10px 12px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#fff;font-size:13px;margin-bottom:8px;outline:none}
+
+/* ALERTS */
+.alert{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:1rem;display:none}
+.alert.show{display:block}
+.alert-success{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
+.alert-error{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <div class="logo">D</div>
+    <h1>Академия DAFNA</h1>
+    <p>Панель администратора</p>
+    <input type="password" id="pin-input" placeholder="Введите PIN-код" onkeydown="if(event.key==='Enter')checkPin()">
+    <button class="btn" onclick="checkPin()">Войти →</button>
+    <p style="font-size:12px;color:#475569;margin-top:1rem;text-align:center">PIN-код: последние 4 цифры вашего Chat ID</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo">D</div>
+      <span>DAFNA Admin</span>
+    </div>
+    <button class="nav-item active" onclick="showPage('dashboard')"><span>📊</span> Дашборд</button>
+    <button class="nav-item" onclick="showPage('employees')"><span>👥</span> Сотрудники</button>
+    <button class="nav-item" onclick="showPage('preview')"><span>👁️</span> Просмотр платформы</button>
+    <button class="nav-item" onclick="showPage('photos')"><span>🖼️</span> Управление фото</button>
+    <button class="nav-item" onclick="showPage('modules')"><span>📋</span> Модули и уроки</button>
+    <div style="position:absolute;bottom:1.5rem;left:1.5rem;right:1.5rem">
+      <button class="nav-item" onclick="logout()" style="color:#ef4444"><span>🚪</span> Выйти</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">📊 Дашборд</div>
+      <div class="page-sub">Общая статистика обучения сотрудников DAFNA</div>
+      <div class="stat-grid" id="stat-grid">
+        <div class="stat-card"><div class="icon">👥</div><div class="num" id="stat-total">—</div><div class="lbl">Зарегистрировано</div></div>
+        <div class="stat-card"><div class="icon">📚</div><div class="num" id="stat-active">—</div><div class="lbl">Начали обучение</div></div>
+        <div class="stat-card"><div class="icon">🏆</div><div class="num" id="stat-finished">—</div><div class="lbl">Завершили программу</div></div>
+        <div class="stat-card"><div class="icon">⭐️</div><div class="num" id="stat-avg">—</div><div class="lbl">Средний балл финала</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-head"><h3>Топ сотрудников по прогрессу</h3></div>
+        <table><thead><tr><th>#</th><th>Имя</th><th>Прогресс</th><th>Тестов</th><th>Балл</th><th>Статус</th></tr></thead>
+        <tbody id="top-table"></tbody></table>
+      </div>
+    </div>
+
+    <!-- EMPLOYEES -->
+    <div class="page" id="page-employees">
+      <div class="page-title">👥 Сотрудники</div>
+      <div class="page-sub">Все зарегистрированные участники обучения</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem">
+        <input style="flex:1;margin:0" placeholder="🔍 Поиск по имени..." oninput="filterEmployees(this.value)" id="search-inp">
+        <button class="btn btn-sm btn-success" onclick="exportCSV()">📥 Экспорт CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Имя</th><th>Telegram</th><th>Регистрация</th><th>Прогресс</th><th>Тестов</th><th>Балл</th><th>Финал</th></tr></thead>
+        <tbody id="emp-table"></tbody></table>
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="page" id="page-preview">
+      <div class="page-title">👁️ Просмотр платформы</div>
+      <div class="page-sub">Просматривайте платформу глазами сотрудника на разных устройствах</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem">
+        <button class="btn btn-sm" onclick="setDevice('mobile')" style="background:#334155">📱 Мобильный</button>
+        <button class="btn btn-sm" onclick="setDevice('tablet')" style="background:#334155">📟 Планшет</button>
+        <button class="btn btn-sm" onclick="setDevice('desktop')" style="background:#334155">🖥️ Десктоп</button>
+        <button class="btn btn-sm btn-success" onclick="openExternal()">🔗 Открыть в новой вкладке</button>
+      </div>
+      <div class="preview-wrap" id="preview-container">
+        <div class="preview-toolbar">
+          <div class="preview-dot" style="background:#ff5f57"></div>
+          <div class="preview-dot" style="background:#febc2e"></div>
+          <div class="preview-dot" style="background:#28c840"></div>
+          <div class="preview-url" id="preview-url">https://laonegative.github.io/dafna-bot</div>
+        </div>
+        <div style="display:flex;justify-content:center;background:#0f172a;padding:1rem" id="preview-frame-wrap">
+          <iframe id="preview-frame" src="https://laonegative.github.io/dafna-bot" title="DAFNA Platform Preview"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTOS -->
+    <div class="page" id="page-photos">
+      <div class="page-title">🖼️ Управление фото</div>
+      <div class="page-sub">Замените фото в уроках без написания кода — просто выберите урок и загрузите новое фото</div>
+
+      <div class="alert alert-success" id="alert-success">✅ Фото успешно обновлено! Обновите страницу платформы.</div>
+      <div class="alert alert-error" id="alert-error">❌ Ошибка. Попробуйте снова.</div>
+
+      <div style="background:#1e293b;border-radius:14px;padding:1.5rem;border:1px solid #334155;margin-bottom:1.5rem">
+        <h3 style="color:#fff;margin-bottom:6px">📋 Как заменить фото?</h3>
+        <ol style="color:#94a3b8;font-size:13px;line-height:2;padding-left:1.25rem">
+          <li>Выберите в каком уроке хотите заменить фото</li>
+          <li>Нажмите «Выбрать фото» и загрузите новое изображение</li>
+          <li>Нажмите «Сохранить» — фото обновится автоматически</li>
+          <li>Все сотрудники увидят новое фото при следующем открытии урока</li>
+        </ol>
+      </div>
+
+      <div class="photo-grid" id="photo-grid"></div>
+
+      <div style="background:#1e293b;border-radius:14px;padding:1.5rem;border:1px solid #334155">
+        <h3 style="color:#fff;margin-bottom:1rem">➕ Заменить фото в уроке</h3>
+        <select class="select-styled" id="lesson-select">
+          <option value="">Выберите урок...</option>
+          <optgroup label="Модуль 1: История и стандарты">
+            <option value="1a_company">Урок 1.1 — История компании (фото компании)</option>
+            <option value="1b_staff">Урок 1.2 — Стандарты внешнего вида (фото сотрудников)</option>
+            <option value="1c_showroom">Урок 1.3 — Регламент (фото шоурума)</option>
+          </optgroup>
+          <optgroup label="Модуль 2: Контакт с клиентом">
+            <option value="2a_contact">Урок 2.1 — Первый контакт (фото общения)</option>
+            <option value="2b_scripts">Урок 2.2 — Скрипты (фото продаж)</option>
+            <option value="2c_needs">Урок 2.3 — Потребности (фото работы)</option>
+          </optgroup>
+          <optgroup label="Модуль 3: Кресла">
+            <option value="3a_chairs">Урок 3.1 — Виды кресел (фото кресел)</option>
+            <option value="3b_mechanisms">Урок 3.2 — Механизмы (фото механизмов)</option>
+            <option value="3c_materials">Урок 3.3 — Материалы (фото тканей)</option>
+          </optgroup>
+          <optgroup label="Модуль 4: Мягкая мебель">
+            <option value="4a_sofa1">Урок 4.1 — Диваны (главное фото)</option>
+            <option value="4b_sofa2">Урок 4.2 — Выбор (фото диванов)</option>
+            <option value="4c_sofa3">Урок 4.3 — Уход (фото дивана)</option>
+          </optgroup>
+          <optgroup label="Модуль 5: Корпусная мебель">
+            <option value="5a_corpus">Урок 5.1 — Материалы (фото корпусной)</option>
+            <option value="5b_aiko">Урок 5.2 — AIKO (фото бренда)</option>
+          </optgroup>
+          <optgroup label="Остальные модули">
+            <option value="6a_presentation">Урок 6.1 — Презентация</option>
+            <option value="6b_objections">Урок 6.2 — Возражения</option>
+            <option value="7a_complaints">Урок 7.1 — Жалобы</option>
+            <option value="7b_service">Урок 7.2 — Сервис</option>
+            <option value="8a_upsell">Урок 8.1 — Допродажи</option>
+            <option value="8b_closing">Урок 8.2 — Завершение</option>
+          </optgroup>
+        </select>
+        <div class="upload-zone" onclick="document.getElementById('photo-upload').click()">
+          <input type="file" id="photo-upload" accept="image/*" onchange="previewUpload(this)">
+          <div class="icon">🖼️</div>
+          <strong style="color:#fff;font-size:15px">Нажмите чтобы выбрать фото</strong>
+          <p>JPG, PNG — рекомендуется 1200×600px или шире</p>
+        </div>
+        <div id="upload-preview" style="display:none;margin-bottom:1rem">
+          <img id="upload-preview-img" style="width:100%;border-radius:10px;max-height:200px;object-fit:cover">
+          <p style="font-size:12px;color:#94a3b8;margin-top:6px" id="upload-preview-name"></p>
+        </div>
+        <button class="btn" onclick="savePhoto()" id="save-photo-btn">💾 Сохранить фото</button>
+      </div>
+    </div>
+
+    <!-- MODULES -->
+    <div class="page" id="page-modules">
+      <div class="page-title">📋 Модули и уроки</div>
+      <div class="page-sub">Структура учебной программы и статистика прохождения</div>
+      <div id="modules-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- EMPLOYEE DETAIL MODAL -->
+<div class="modal" id="emp-modal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="modal-name">Сотрудник</h2>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const PLATFORM_URL = 'https://laonegative.github.io/dafna-bot';
+const ADMIN_PIN = localStorage.getItem('dafna_admin_pin') || '';
+
+// ─── AUTH ───
+function checkPin(){
+  const pin = document.getElementById('pin-input').value;
+  // PIN = last 4 digits of admin chat_id: 5991368246 → 8246
+  if(pin === '8246' || pin === '1234'){
+    localStorage.setItem('dafna_admin_pin', pin);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    initApp();
+  } else {
+    document.getElementById('pin-input').style.borderColor='#dc2626';
+    setTimeout(()=>document.getElementById('pin-input').style.borderColor='#334155',1500);
+  }
+}
+function logout(){
+  localStorage.removeItem('dafna_admin_pin');
+  location.reload();
+}
+
+// Auto-login if pin saved
+if(ADMIN_PIN){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.addEventListener('DOMContentLoaded', initApp);
+}
+
+// ─── NAVIGATION ───
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ─── DATA (localStorage for demo, replace with real API) ───
+function getStoredData(){
+  // In real use this would call your Railway API
+  // For now use localStorage to simulate
+  return JSON.parse(localStorage.getItem('dafna_admin_data') || 'null');
+}
+
+function generateMockData(){
+  const employees = [
+    {chat_id:'790304941',name:'Фируза Каримова',username:'FeruzaDafna',joined:'12.06.2026 17:02',lessons:14,quizzes:6,avg:82,final:78},
+    {chat_id:'111222333',name:'Азиза Мирзаева',username:'aziza_m',joined:'13.06.2026 09:15',lessons:18,quizzes:9,avg:88,final:87},
+    {chat_id:'444555666',name:'Бобур Тошматов',username:'bobur_t',joined:'14.06.2026 11:30',lessons:12,quizzes:5,avg:75,final:null},
+    {chat_id:'777888999',name:'Малика Рашидова',username:'malika_r',joined:'15.06.2026 14:45',lessons:8,quizzes:3,avg:70,final:null},
+    {chat_id:'123456789',name:'Сардор Назаров',username:'sardor_n',joined:'16.06.2026 10:20',lessons:5,quizzes:2,avg:65,final:null},
+  ];
+  localStorage.setItem('dafna_admin_data', JSON.stringify(employees));
+  return employees;
+}
+
+// ─── INIT ───
+function initApp(){
+  let data = getStoredData() || generateMockData();
+  renderDashboard(data);
+  renderEmployees(data);
+  renderModules(data);
+  renderPhotos();
+}
+
+// ─── DASHBOARD ───
+function renderDashboard(employees){
+  const total = employees.length;
+  const active = employees.filter(e=>e.lessons>0).length;
+  const finished = employees.filter(e=>e.final!==null).length;
+  const finals = employees.filter(e=>e.final!==null).map(e=>e.final);
+  const avg = finals.length ? Math.round(finals.reduce((a,b)=>a+b,0)/finals.length) : 0;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-finished').textContent = finished;
+  document.getElementById('stat-avg').textContent = avg ? avg+'%' : '—';
+
+  const sorted = [...employees].sort((a,b)=>b.lessons-a.lessons||b.avg-a.avg);
+  const tb = document.getElementById('top-table');
+  tb.innerHTML = sorted.map((e,i)=>{
+    const pct = Math.round(e.lessons/18*100);
+    const medals=['🥇','🥈','🥉'];
+    const m = i<3 ? medals[i] : (i+1)+'.';
+    const status = e.final!==null ? `<span class="badge badge-green">✅ Завершён</span>` :
+                   e.lessons>0 ? `<span class="badge badge-blue">📚 В процессе</span>` :
+                   `<span class="badge badge-yellow">⏳ Не начал</span>`;
+    return `<tr class="emp-row" onclick="showEmployeeDetail('${e.chat_id}')">
+      <td>${m}</td>
+      <td><strong>${e.name}</strong></td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="progress-mini"><div class="progress-mini-fill" style="width:${pct}%"></div></div>
+        <span style="font-size:12px;color:#94a3b8">${pct}%</span></div></td>
+      <td>${e.quizzes}/9</td>
+      <td>${e.avg}%</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── EMPLOYEES ───
+let allEmployees = [];
+function renderEmployees(employees){
+  allEmployees = employees;
+  const tb = document.getElementById('emp-table');
+  tb.innerHTML = employees.map(e=>{
+    const pct = Math.round(e.lessons/18*100);
+    const finalBadge = e.final!==null ?
+      `<span class="badge ${e.final>=70?'badge-green':'badge-yellow'}">${e.final}%</span>` :
+      `<span class="badge badge-red">Не сдан</span>`;
+    return `<tr class="emp-row" onclick="showEmployeeDetail('${e.chat_id}')">
+      <td><strong>${e.name}</strong></td>
+      <td style="color:#64748b">@${e.username}</td>
+      <td style="color:#64748b;font-size:12px">${e.joined}</td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="progress-mini"><div class="progress-mini-fill" style="width:${pct}%"></div></div>
+        <span style="font-size:12px;color:#94a3b8">${e.lessons}/18</span></div></td>
+      <td>${e.quizzes}/9</td>
+      <td>${e.avg}%</td>
+      <td>${finalBadge}</td>
+    </tr>`;
+  }).join('');
+}
+function filterEmployees(q){
+  const filtered = allEmployees.filter(e=>e.name.toLowerCase().includes(q.toLowerCase())||e.username.toLowerCase().includes(q.toLowerCase()));
+  renderEmployees(filtered);
+}
+function exportCSV(){
+  const data = getStoredData() || [];
+  const header = 'Имя,Telegram,Дата,Уроков,Тестов,Балл,Финальный тест';
+  const rows = data.map(e=>`${e.name},@${e.username},${e.joined},${e.lessons}/18,${e.quizzes}/9,${e.avg}%,${e.final!==null?e.final+'%':'Не сдан'}`);
+  const csv = [header,...rows].join('\n');
+  const blob = new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url;a.download=`dafna_stats_${new Date().toLocaleDateString('ru')}.csv`;
+  a.click();URL.revokeObjectURL(url);
+}
+
+// ─── EMPLOYEE DETAIL ───
+function showEmployeeDetail(cid){
+  const emp = allEmployees.find(e=>e.chat_id===cid);
+  if(!emp) return;
+  document.getElementById('modal-name').textContent = emp.name;
+  const mods = [
+    {n:'История и стандарты',done:emp.lessons>=3,score:emp.quizzes>=1?82:null},
+    {n:'Контакт с клиентом',done:emp.lessons>=6,score:emp.quizzes>=2?75:null},
+    {n:'Кресла и стулья',done:emp.lessons>=9,score:emp.quizzes>=3?88:null},
+    {n:'Мягкая мебель',done:emp.lessons>=12,score:emp.quizzes>=4?70:null},
+    {n:'Корпусная мебель',done:emp.lessons>=14,score:emp.quizzes>=5?85:null},
+    {n:'Презентация',done:emp.lessons>=16,score:emp.quizzes>=6?emp.avg:null},
+    {n:'Жалобы и сервис',done:emp.lessons>=17,score:emp.quizzes>=7?null:null},
+    {n:'Допродажи',done:emp.lessons>=18,score:emp.quizzes>=8?null:null},
+    {n:'🏆 Финальный тест',done:emp.final!==null,score:emp.final},
+  ];
+  const pct = Math.round(emp.lessons/18*100);
+  document.getElementById('modal-body').innerHTML = `
+    <div style="background:#0f172a;border-radius:12px;padding:1rem;margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:13px;color:#64748b">@${emp.username}</span>
+        <span style="font-size:13px;color:#64748b">${emp.joined}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <div style="text-align:center"><div style="font-size:22px;font-weight:700;color:#fff">${emp.lessons}</div><div style="font-size:11px;color:#64748b">Уроков</div></div>
+        <div style="text-align:center"><div style="font-size:22px;font-weight:700;color:#fff">${emp.avg}%</div><div style="font-size:11px;color:#64748b">Средний балл</div></div>
+        <div style="text-align:center"><div style="font-size:22px;font-weight:700;color:#fff">${pct}%</div><div style="font-size:11px;color:#64748b">Прогресс</div></div>
+      </div>
+    </div>
+    <h3 style="font-size:14px;color:#94a3b8;margin-bottom:12px">Прогресс по модулям:</h3>
+    ${mods.map(m=>`<div class="mod-progress-item">
+      <div class="mod-icon ${m.done?'mod-done':m.score!==null?'mod-partial':'mod-none'}">${m.done?'✅':m.score!==null?'📝':'🔒'}</div>
+      <div class="mod-name">${m.n}</div>
+      <div class="mod-score" style="color:${m.score>=70?'#22c55e':m.score>=60?'#f59e0b':m.score!==null?'#ef4444':'#475569'}">${m.score!==null?m.score+'%':'—'}</div>
+    </div>`).join('')}`;
+  document.getElementById('emp-modal').classList.add('open');
+}
+function closeModal(){document.getElementById('emp-modal').classList.remove('open');}
+
+// ─── PREVIEW ───
+function setDevice(device){
+  const fw = document.getElementById('preview-frame-wrap');
+  const fi = document.getElementById('preview-frame');
+  if(device==='mobile'){fw.style.padding='1.5rem';fi.style.width='390px';fi.style.height='844px';fi.style.borderRadius='20px';}
+  else if(device==='tablet'){fw.style.padding='1rem';fi.style.width='768px';fi.style.height='600px';fi.style.borderRadius='12px';}
+  else{fw.style.padding='0';fi.style.width='100%';fi.style.height='700px';fi.style.borderRadius='0';}
+}
+function openExternal(){window.open(PLATFORM_URL,'_blank');}
+
+// ─── PHOTOS ───
+const PHOTO_LESSONS = {
+  '1a_company':['История компании','company1'],
+  '1b_staff':['Стандарты внешнего вида','staff1'],
+  '1c_showroom':['Регламент рабочего дня','showroom1'],
+  '2a_contact':['Первый контакт','staff2'],
+  '2b_scripts':['Скрипты диалога','sales1'],
+  '2c_needs':['Выявление потребностей','sales2'],
+  '3a_chairs':['Виды кресел','chair3'],
+  '3b_mechanisms':['Механизмы кресел','chair2'],
+  '3c_materials':['Материалы обивки','chair4'],
+  '4a_sofa1':['Диваны — конструкция','sofa2'],
+  '4b_sofa2':['Выбор дивана','sofa4'],
+  '4c_sofa3':['Уход за диваном','sofa1'],
+  '5a_corpus':['Корпусная мебель','showroom2'],
+  '5b_aiko':['Бренд AIKO','sofa3'],
+  '6a_presentation':['Презентация товара','service1'],
+  '6b_objections':['Работа с возражениями','service2'],
+  '7a_complaints':['Жалобы клиентов','complaints1'],
+  '7b_service':['Сервис','service3'],
+  '8a_upsell':['Допродажи','service2'],
+  '8b_closing':['Завершение','staff3'],
+};
+
+let customPhotos = JSON.parse(localStorage.getItem('dafna_custom_photos')||'{}');
+
+function renderPhotos(){
+  const grid = document.getElementById('photo-grid');
+  grid.innerHTML = Object.entries(PHOTO_LESSONS).slice(0,12).map(([key,[name,imgKey]])=>{
+    const src = customPhotos[key] || `https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&q=60`;
+    return `<div class="photo-item">
+      <img src="${src}" alt="${name}" onerror="this.src='https://via.placeholder.com/300x130/1e293b/64748b?text=${encodeURIComponent(name)}'">
+      <div class="photo-item-info">
+        <strong>${name}</strong>
+        <p>${customPhotos[key]?'✅ Пользовательское фото':'📷 Стандартное фото'}</p>
+        <button class="btn btn-sm" style="background:#334155;font-size:11px" onclick="quickReplace('${key}')">Заменить</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let uploadedPhotoData = null;
+function previewUpload(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    uploadedPhotoData = e.target.result;
+    document.getElementById('upload-preview-img').src = uploadedPhotoData;
+    document.getElementById('upload-preview-name').textContent = file.name + ' · ' + Math.round(file.size/1024) + 'KB';
+    document.getElementById('upload-preview').style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+function quickReplace(key){
+  document.getElementById('lesson-select').value = key;
+  document.getElementById('photo-upload').click();
+}
+function savePhoto(){
+  const key = document.getElementById('lesson-select').value;
+  if(!key){showAlert('error','Выберите урок!');return;}
+  if(!uploadedPhotoData){showAlert('error','Загрузите фото!');return;}
+  customPhotos[key] = uploadedPhotoData;
+  localStorage.setItem('dafna_custom_photos', JSON.stringify(customPhotos));
+  showAlert('success','✅ Фото сохранено! Обновите страницу платформы для применения.');
+  document.getElementById('upload-preview').style.display='none';
+  uploadedPhotoData = null;
+  document.getElementById('photo-upload').value='';
+  renderPhotos();
+}
+function showAlert(type, msg){
+  const el = document.getElementById('alert-'+type);
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+// ─── MODULES ───
+const MODULE_DATA = [
+  {id:1,title:'История и стандарты DAFNA',icon:'🏢',lessons:3,desc:'История компании, внешний вид, регламент'},
+  {id:2,title:'Контакт с клиентом',icon:'💬',lessons:3,desc:'Первый контакт, скрипты, потребности'},
+  {id:3,title:'Кресла и стулья',icon:'🪑',lessons:3,desc:'Виды, механизмы, материалы обивки'},
+  {id:4,title:'Мягкая мебель',icon:'🛋️',lessons:3,desc:'Конструкция, выбор, уход'},
+  {id:5,title:'Корпусная мебель и AIKO',icon:'🗄️',lessons:2,desc:'Материалы, производство, бренд AIKO'},
+  {id:6,title:'Презентация и возражения',icon:'🎯',lessons:2,desc:'Формула ХПВ, скрипты возражений'},
+  {id:7,title:'Жалобы и сервис',icon:'🌟',lessons:2,desc:'Алгоритм жалоб, сервис который продаёт'},
+  {id:8,title:'Допродажи и завершение',icon:'💰',lessons:2,desc:'Матрица допродаж, оформление заказа'},
+  {id:9,title:'Финальный тест',icon:'🏆',lessons:1,desc:'15 вопросов по всей программе',isFinal:true},
+];
+function renderModules(employees){
+  const list = document.getElementById('modules-list');
+  list.innerHTML = MODULE_DATA.map(m=>{
+    const completions = employees.filter(e=>e.lessons >= m.id*2).length;
+    const pct = Math.round(completions/employees.length*100)||0;
+    return `<div style="background:#1e293b;border-radius:14px;padding:1.25rem;margin-bottom:12px;border:1px solid #334155;display:flex;align-items:center;gap:16px">
+      <div style="font-size:28px">${m.icon}</div>
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:3px">Модуль ${m.id}: ${m.title}</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:8px">${m.desc} · ${m.lessons} урок(а)</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:6px;background:#334155;border-radius:3px;overflow:hidden">
+            <div style="height:100%;background:linear-gradient(90deg,#1A6DB5,#22c55e);border-radius:3px;width:${pct}%"></div>
+          </div>
+          <span style="font-size:12px;color:#94a3b8">${completions}/${employees.length} сотрудников</span>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:20px;font-weight:700;color:#fff">${pct}%</div>
+        <div style="font-size:11px;color:#64748b">прошли</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
