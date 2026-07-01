@@ -1,55 +1,46 @@
 import os
 import json
 import sqlite3
-from datetime import datetime
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from datetime import datetime, timedelta
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler,
     MessageHandler, filters, ContextTypes
 )
 
-# ─────────────────────────────────────────────
-#  НАСТРОЙКИ — заполните своими данными
-# ─────────────────────────────────────────────
-BOT_TOKEN = os.getenv("BOT_TOKEN", "ВАШ_ТОКЕН_СЮДА")
-ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "ВАШ_CHAT_ID_СЮДА")  # ваш личный chat_id
-INVITE_CODE = os.getenv("INVITE_CODE", "DAFNA2024")  # секретный код для входа
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://ваш-сайт.railway.app")  # URL мини-приложения
-
-# ─────────────────────────────────────────────
-#  БАЗА ДАННЫХ (SQLite — файл на сервере)
-# ─────────────────────────────────────────────
+BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "")
+INVITE_CODE = os.getenv("INVITE_CODE", "DAFNA2024")
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://laonegative.github.io/dafna-bot")
 DB_PATH = "dafna.db"
 
+MODULE_NAMES = {
+    1: "История и стандарты",
+    2: "Контакт с клиентом",
+    3: "Кресла и стулья",
+    4: "Мягкая мебель",
+    5: "Корпусная мебель и AIKO",
+    6: "Презентация и возражения",
+    7: "Жалобы и сервис",
+    8: "Допродажи и завершение",
+    9: "Финальный тест",
+    'final': "🏆 Финальный тест"
+}
+
+TOTAL_LESSONS = 18
+TOTAL_MODULES = 8
+
+# ─── DATABASE ───
 def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    
-    # Таблица сотрудников
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS employees (
-            chat_id     TEXT PRIMARY KEY,
-            username    TEXT,
-            full_name   TEXT,
-            joined_at   TEXT,
-            showroom    TEXT DEFAULT 'Не указан'
-        )
-    """)
-    
-    # Таблица прогресса
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS progress (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            chat_id     TEXT,
-            module_id   INTEGER,
-            lesson_id   TEXT,
-            action      TEXT,  -- 'lesson_done' или 'quiz_done'
-            score       INTEGER DEFAULT 0,
-            done_at     TEXT,
-            FOREIGN KEY (chat_id) REFERENCES employees(chat_id)
-        )
-    """)
-    
+    c.execute("""CREATE TABLE IF NOT EXISTS employees (
+        chat_id TEXT PRIMARY KEY, username TEXT, full_name TEXT,
+        joined_at TEXT, showroom TEXT DEFAULT 'Не указан')""")
+    c.execute("""CREATE TABLE IF NOT EXISTS progress (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, chat_id TEXT,
+        module_id TEXT, lesson_id TEXT, action TEXT,
+        score INTEGER DEFAULT 0, done_at TEXT)""")
     conn.commit()
     conn.close()
 
@@ -65,10 +56,8 @@ def register_employee(chat_id, username, full_name):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     now = datetime.now().strftime("%d.%m.%Y %H:%M")
-    c.execute("""
-        INSERT OR IGNORE INTO employees (chat_id, username, full_name, joined_at)
-        VALUES (?, ?, ?, ?)
-    """, (str(chat_id), username or "—", full_name, now))
+    c.execute("INSERT OR IGNORE INTO employees (chat_id,username,full_name,joined_at) VALUES (?,?,?,?)",
+              (str(chat_id), username or "—", full_name, now))
     conn.commit()
     conn.close()
 
@@ -76,37 +65,25 @@ def save_progress(chat_id, module_id, lesson_id, action, score=0):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     now = datetime.now().strftime("%d.%m.%Y %H:%M")
-    # Проверяем, нет ли уже такой записи
-    c.execute("""
-        SELECT id FROM progress 
-        WHERE chat_id=? AND module_id=? AND lesson_id=? AND action=?
-    """, (str(chat_id), module_id, lesson_id, action))
+    c.execute("SELECT id FROM progress WHERE chat_id=? AND module_id=? AND lesson_id=? AND action=?",
+              (str(chat_id), str(module_id), lesson_id, action))
     exists = c.fetchone()
-    if not exists:
-        c.execute("""
-            INSERT INTO progress (chat_id, module_id, lesson_id, action, score, done_at)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (str(chat_id), module_id, lesson_id, action, score, now))
-        conn.commit()
+    is_new = not exists
+    if is_new:
+        c.execute("INSERT INTO progress (chat_id,module_id,lesson_id,action,score,done_at) VALUES (?,?,?,?,?,?)",
+                  (str(chat_id), str(module_id), lesson_id, action, score, now))
+    else:
+        # Update score if better
+        c.execute("UPDATE progress SET score=?,done_at=? WHERE chat_id=? AND module_id=? AND lesson_id=? AND action=?",
+                  (score, now, str(chat_id), str(module_id), lesson_id, action))
+    conn.commit()
     conn.close()
-    return not exists  # True если это новое достижение
-
-def get_all_progress(chat_id):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("""
-        SELECT module_id, lesson_id, action, score, done_at
-        FROM progress WHERE chat_id=?
-        ORDER BY done_at DESC
-    """, (str(chat_id),))
-    rows = c.fetchall()
-    conn.close()
-    return rows
+    return is_new
 
 def get_all_employees():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT chat_id, username, full_name, joined_at, showroom FROM employees ORDER BY joined_at DESC")
+    c.execute("SELECT chat_id,username,full_name,joined_at,showroom FROM employees ORDER BY joined_at DESC")
     rows = c.fetchall()
     conn.close()
     return rows
@@ -116,338 +93,357 @@ def get_employee_stats(chat_id):
     c = conn.cursor()
     c.execute("SELECT COUNT(*) FROM progress WHERE chat_id=? AND action='lesson_done'", (str(chat_id),))
     lessons = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM progress WHERE chat_id=? AND action='quiz_done'", (str(chat_id),))
+    c.execute("SELECT COUNT(*) FROM progress WHERE chat_id=? AND action IN ('quiz_done','final_done')", (str(chat_id),))
     quizzes = c.fetchone()[0]
-    c.execute("SELECT AVG(score) FROM progress WHERE chat_id=? AND action='quiz_done'", (str(chat_id),))
-    avg_score = c.fetchone()[0]
+    c.execute("SELECT AVG(score) FROM progress WHERE chat_id=? AND action IN ('quiz_done','final_done')", (str(chat_id),))
+    avg = c.fetchone()[0] or 0
+    c.execute("SELECT module_id,score,done_at FROM progress WHERE chat_id=? AND action IN ('quiz_done','final_done') ORDER BY module_id", (str(chat_id),))
+    quiz_details = c.fetchall()
+    c.execute("SELECT done_at FROM progress WHERE chat_id=? ORDER BY done_at DESC LIMIT 1", (str(chat_id),))
+    last = c.fetchone()
     conn.close()
-    return lessons, quizzes, round(avg_score or 0)
+    return lessons, quizzes, round(avg), quiz_details, last[0] if last else None
 
-# ─────────────────────────────────────────────
-#  HANDLERS — реакции на команды
-# ─────────────────────────────────────────────
+def get_summary_stats():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM employees")
+    total_emp = c.fetchone()[0]
+    c.execute("SELECT COUNT(DISTINCT chat_id) FROM progress")
+    active = c.fetchone()[0]
+    c.execute("SELECT COUNT(DISTINCT chat_id) FROM progress WHERE action='final_done'")
+    finished = c.fetchone()[0]
+    c.execute("SELECT AVG(score) FROM progress WHERE action='final_done'")
+    avg_final = c.fetchone()[0] or 0
+    # Active today
+    today = datetime.now().strftime("%d.%m.%Y")
+    c.execute("SELECT COUNT(DISTINCT chat_id) FROM progress WHERE done_at LIKE ?", (today+'%',))
+    today_active = c.fetchone()[0]
+    conn.close()
+    return total_emp, active, finished, round(avg_final), today_active
 
+# ─── HANDLERS ───
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Команда /start — точка входа"""
     chat_id = update.effective_chat.id
     user = update.effective_user
-    args = context.args  # аргументы после /start
+    args = context.args
 
-    # Проверяем код приглашения
     if args and args[0] == INVITE_CODE:
         employee = get_employee(chat_id)
         if not employee:
-            # Новый сотрудник — просим представиться
             context.user_data['awaiting_name'] = True
             context.user_data['invite_verified'] = True
             await update.message.reply_text(
                 "👋 Добро пожаловать в *Академию DAFNA*!\n\n"
                 "Пожалуйста, напишите ваше *полное имя* (Имя Фамилия):",
-                parse_mode="Markdown"
-            )
+                parse_mode="Markdown")
         else:
-            # Уже зарегистрирован — сразу в обучение
             await show_main_menu(update, context)
     else:
-        # Нет кода — проверяем, зарегистрирован ли
         employee = get_employee(chat_id)
         if employee:
             await show_main_menu(update, context)
         else:
             await update.message.reply_text(
-                "🔒 Доступ только по ссылке-приглашению.\n\n"
-                "Обратитесь к вашему стор-менеджеру для получения ссылки."
-            )
+                "🔒 Доступ только по ссылке-приглашению.\n"
+                "Обратитесь к вашему стор-менеджеру.")
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработка текстовых сообщений (ввод имени при регистрации)"""
     chat_id = update.effective_chat.id
     user = update.effective_user
     text = update.message.text.strip()
 
     if context.user_data.get('awaiting_name') and context.user_data.get('invite_verified'):
-        # Сохраняем имя и регистрируем
         full_name = text
-        username = user.username or "—"
-        register_employee(chat_id, username, full_name)
+        register_employee(chat_id, user.username, full_name)
         context.user_data['awaiting_name'] = False
         context.user_data['invite_verified'] = False
 
-        # Уведомляем администратора
         now = datetime.now().strftime("%d.%m.%Y в %H:%M")
-        admin_msg = (
-            f"🆕 *Новый сотрудник зарегистрировался!*\n\n"
-            f"👤 Имя: {full_name}\n"
-            f"💬 Telegram: @{username}\n"
-            f"🆔 Chat ID: `{chat_id}`\n"
-            f"🕐 Время: {now}"
-        )
         try:
             await context.bot.send_message(
                 chat_id=ADMIN_CHAT_ID,
-                text=admin_msg,
-                parse_mode="Markdown"
-            )
-        except Exception as e:
-            print(f"Не смог отправить уведомление админу: {e}")
+                text=f"🆕 *Новый сотрудник!*\n\n👤 {full_name}\n💬 @{user.username or '—'}\n🆔 `{chat_id}`\n🕐 {now}",
+                parse_mode="Markdown")
+        except: pass
 
         await update.message.reply_text(
-            f"✅ Отлично, *{full_name}*! Вы зарегистрированы.\n\n"
-            f"Добро пожаловать в Академию DAFNA! 🎓",
-            parse_mode="Markdown"
-        )
+            f"✅ Отлично, *{full_name}*! Вы зарегистрированы в Академии DAFNA! 🎓",
+            parse_mode="Markdown")
         await show_main_menu(update, context)
 
 async def show_main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Главное меню после входа"""
     chat_id = update.effective_chat.id
     employee = get_employee(chat_id)
-    if not employee:
-        return
+    if not employee: return
+    lessons, quizzes, avg, _, last_active = get_employee_stats(chat_id)
+    name = employee[2]
+    pct = round(lessons / TOTAL_LESSONS * 100)
 
-    lessons, quizzes, avg = get_employee_stats(chat_id)
-    name = employee[2]  # full_name
+    bar_filled = round(pct / 10)
+    progress_bar = '█' * bar_filled + '░' * (10 - bar_filled)
 
     keyboard = [
-        [InlineKeyboardButton(
-            "📚 Открыть обучение",
-            web_app=WebAppInfo(url=f"{WEBAPP_URL}?uid={chat_id}")
-        )],
-        [InlineKeyboardButton("📊 Мой прогресс", callback_data="my_progress")],
+        [InlineKeyboardButton("📚 Открыть обучение", web_app={"url": f"{WEBAPP_URL}?uid={chat_id}"})],
+        [InlineKeyboardButton("📊 Мой прогресс", callback_data="my_progress"),
+         InlineKeyboardButton("🏆 Рейтинг", callback_data="rating")],
         [InlineKeyboardButton("ℹ️ Помощь", callback_data="help")],
     ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
 
-    text = (
-        f"👋 Привет, *{name}*!\n\n"
-        f"📚 Академия DAFNA — ваш учебный центр\n\n"
-        f"📈 *Ваша статистика:*\n"
-        f"• Уроков пройдено: *{lessons}*\n"
-        f"• Тестов сдано: *{quizzes}*\n"
-        f"• Средний балл: *{avg}%*\n\n"
-        f"Нажмите кнопку ниже, чтобы начать обучение 👇"
-    )
+    text = (f"👋 Привет, *{name}*!\n\n"
+            f"`{progress_bar}` {pct}%\n\n"
+            f"📚 Уроков: *{lessons}/{TOTAL_LESSONS}*\n"
+            f"✅ Тестов: *{quizzes}*\n"
+            f"⭐️ Балл: *{avg}%*\n\n"
+            f"Нажмите кнопку чтобы начать обучение 👇")
 
     if update.callback_query:
-        await update.callback_query.edit_message_text(text, parse_mode="Markdown", reply_markup=reply_markup)
+        await update.callback_query.edit_message_text(
+            text, parse_mode="Markdown",
+            reply_markup=InlineKeyboardMarkup(keyboard))
     else:
-        await update.message.reply_text(text, parse_mode="Markdown", reply_markup=reply_markup)
+        await update.message.reply_text(
+            text, parse_mode="Markdown",
+            reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def my_progress(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Детальный прогресс сотрудника"""
     query = update.callback_query
     await query.answer()
     chat_id = update.effective_chat.id
-
-    lessons, quizzes, avg = get_employee_stats(chat_id)
-    progress = get_all_progress(chat_id)
-
-    # Подсчёт по модулям
-    modules_done = set()
-    quiz_results = {}
-    for row in progress:
-        mod_id, les_id, action, score, done_at = row
-        modules_done.add(mod_id)
-        if action == 'quiz_done':
-            quiz_results[mod_id] = score
-
-    MODULE_NAMES = {
-        1: "Добро пожаловать в DAFNA",
-        2: "Контакт с клиентом",
-        3: "Ассортимент: кресла и стулья",
-        4: "Презентация и возражения",
-        5: "Допродажи и завершение"
-    }
+    lessons, quizzes, avg, quiz_details, last = get_employee_stats(chat_id)
+    pct = round(lessons / TOTAL_LESSONS * 100)
 
     modules_text = ""
-    for mid, mname in MODULE_NAMES.items():
-        if mid in quiz_results:
-            score = quiz_results[mid]
-            emoji = "✅" if score >= 60 else "⚠️"
-            modules_text += f"{emoji} {mname}: *{score}%*\n"
-        elif mid in modules_done:
-            modules_text += f"📖 {mname}: в процессе\n"
+    done_mods = {str(qd[0]): qd[1] for qd in quiz_details}
+    for i in range(1, 10):
+        mid = str(i)
+        name = MODULE_NAMES.get(i, f"Модуль {i}")
+        if i == 9:
+            name = "🏆 Финальный тест"
+            mid = 'final'
+        if mid in done_mods:
+            s = done_mods[mid]
+            e = "✅" if s >= 70 else "⚠️"
+            modules_text += f"{e} {name}: *{s}%*\n"
         else:
-            modules_text += f"🔒 {mname}: не начат\n"
+            modules_text += f"🔒 {name}\n"
 
-    text = (
-        f"📊 *Ваш прогресс*\n\n"
-        f"📚 Уроков пройдено: *{lessons}*\n"
-        f"✅ Тестов сдано: *{quizzes}* из 5\n"
-        f"⭐️ Средний балл: *{avg}%*\n\n"
-        f"*По модулям:*\n{modules_text}"
-    )
+    text = (f"📊 *Мой прогресс*\n\n"
+            f"📚 Уроков: *{lessons}/{TOTAL_LESSONS}* ({pct}%)\n"
+            f"✅ Тестов сдано: *{quizzes}*\n"
+            f"⭐️ Средний балл: *{avg}%*\n"
+            f"🕐 Последняя активность: {last or 'нет данных'}\n\n"
+            f"*По модулям:*\n{modules_text}")
 
-    keyboard = [[InlineKeyboardButton("⬅️ Назад", callback_data="main_menu")]]
-    await query.edit_message_text(text, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard))
+    kb = [[InlineKeyboardButton("⬅️ Главное меню", callback_data="main_menu")]]
+    await query.edit_message_text(text, parse_mode="Markdown",
+                                   reply_markup=InlineKeyboardMarkup(kb))
+
+async def show_rating(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    employees = get_all_employees()
+    rows = []
+    for emp in employees:
+        cid, uname, fname, joined, _ = emp
+        l, q, avg, _, _ = get_employee_stats(cid)
+        pct = round(l / TOTAL_LESSONS * 100)
+        rows.append((pct, avg, fname, l, q))
+    rows.sort(reverse=True)
+
+    medals = ['🥇', '🥈', '🥉']
+    text = "🏆 *Рейтинг сотрудников*\n\n"
+    for i, (pct, avg, name, lessons, quizzes) in enumerate(rows[:10]):
+        m = medals[i] if i < 3 else f"{i+1}."
+        text += f"{m} *{name}*\n   📚 {lessons} ур. · ✅ {quizzes} тестов · ⭐️ {avg}%\n\n"
+
+    kb = [[InlineKeyboardButton("⬅️ Назад", callback_data="main_menu")]]
+    await query.edit_message_text(text, parse_mode="Markdown",
+                                   reply_markup=InlineKeyboardMarkup(kb))
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    text = (
-        "ℹ️ *Помощь*\n\n"
-        "📚 *Как пользоваться:*\n"
-        "1. Нажмите «Открыть обучение»\n"
-        "2. Изучайте уроки по порядку\n"
-        "3. После каждого модуля — тест\n"
-        "4. Ваш прогресс сохраняется автоматически\n\n"
-        "❓ *Проблемы?*\n"
-        "Обратитесь к стор-менеджеру"
-    )
-    keyboard = [[InlineKeyboardButton("⬅️ Назад", callback_data="main_menu")]]
-    await query.edit_message_text(text, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard))
+    text = ("ℹ️ *Помощь*\n\n"
+            "1. Нажмите «Открыть обучение»\n"
+            "2. Изучайте уроки по порядку\n"
+            "3. После каждого модуля — тест\n"
+            "4. В конце — финальный тест из 15 вопросов\n\n"
+            "❓ Проблемы? Обратитесь к стор-менеджеру")
+    kb = [[InlineKeyboardButton("⬅️ Назад", callback_data="main_menu")]]
+    await query.edit_message_text(text, parse_mode="Markdown",
+                                   reply_markup=InlineKeyboardMarkup(kb))
 
 async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.callback_query
-    data = query.data
-    if data == "main_menu":
-        await show_main_menu(update, context)
-    elif data == "my_progress":
-        await my_progress(update, context)
-    elif data == "help":
-        await help_handler(update, context)
+    data = update.callback_query.data
+    if data == "main_menu": await show_main_menu(update, context)
+    elif data == "my_progress": await my_progress(update, context)
+    elif data == "rating": await show_rating(update, context)
+    elif data == "help": await help_handler(update, context)
+    elif data.startswith("emp_"): await show_employee_detail(update, context)
 
-# ─────────────────────────────────────────────
-#  WEBHOOK от Web App — прогресс из браузера
-# ─────────────────────────────────────────────
-async def webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Получаем данные о прогрессе из мини-приложения"""
-    chat_id = update.effective_chat.id
-    employee = get_employee(chat_id)
-    if not employee:
-        return
-
-    try:
-        data = json.loads(update.effective_message.web_app_data.data)
-        action = data.get("action")
-        module_id = data.get("module_id")
-        lesson_id = data.get("lesson_id", "")
-        score = data.get("score", 0)
-        name = employee[2]
-
-        is_new = save_progress(chat_id, module_id, lesson_id, action, score)
-
-        if is_new:
-            MODULE_NAMES = {
-                1: "Добро пожаловать в DAFNA",
-                2: "Контакт с клиентом",
-                3: "Ассортимент: кресла и стулья",
-                4: "Презентация и возражения",
-                5: "Допродажи и завершение"
-            }
-            mod_name = MODULE_NAMES.get(int(module_id), f"Модуль {module_id}")
-            now = datetime.now().strftime("%d.%m.%Y %H:%M")
-
-            if action == "lesson_done":
-                admin_msg = (
-                    f"📖 *Урок пройден*\n\n"
-                    f"👤 {name}\n"
-                    f"📚 {mod_name}\n"
-                    f"📝 Урок: {lesson_id}\n"
-                    f"🕐 {now}"
-                )
-                await update.message.reply_text(f"✅ Урок сохранён! Отличная работа, {name.split()[0]}!")
-
-            elif action == "quiz_done":
-                emoji = "🏆" if score >= 80 else ("✅" if score >= 60 else "📝")
-                result = "Отлично!" if score >= 80 else ("Зачёт!" if score >= 60 else "Нужно повторить")
-                admin_msg = (
-                    f"{emoji} *Тест сдан*\n\n"
-                    f"👤 {name}\n"
-                    f"📚 {mod_name}\n"
-                    f"⭐️ Результат: *{score}%* — {result}\n"
-                    f"🕐 {now}"
-                )
-                await update.message.reply_text(
-                    f"{emoji} Тест завершён!\n"
-                    f"Ваш результат: *{score}%* — {result}",
-                    parse_mode="Markdown"
-                )
-
-            # Уведомляем администратора
-            try:
-                await context.bot.send_message(
-                    chat_id=ADMIN_CHAT_ID,
-                    text=admin_msg,
-                    parse_mode="Markdown"
-                )
-            except Exception as e:
-                print(f"Ошибка уведомления: {e}")
-
-    except Exception as e:
-        print(f"Ошибка обработки данных webapp: {e}")
-
-# ─────────────────────────────────────────────
-#  КОМАНДЫ ДЛЯ АДМИНИСТРАТОРА
-# ─────────────────────────────────────────────
+# ─── ADMIN COMMANDS ───
+def is_admin(chat_id):
+    return str(chat_id) == str(ADMIN_CHAT_ID)
 
 async def admin_stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Команда /stats — только для администратора"""
-    chat_id = str(update.effective_chat.id)
-    if chat_id != str(ADMIN_CHAT_ID):
+    if not is_admin(update.effective_chat.id):
+        await update.message.reply_text("⛔️ Нет доступа.")
+        return
+
+    total, active, finished, avg_final, today = get_summary_stats()
+    employees = get_all_employees()
+
+    text = (f"📊 *Статистика Академии DAFNA*\n\n"
+            f"👥 Всего зарегистрировано: *{total}*\n"
+            f"📚 Начали обучение: *{active}*\n"
+            f"🏆 Завершили программу: *{finished}*\n"
+            f"⭐️ Средний балл финала: *{avg_final}%*\n"
+            f"🟢 Активны сегодня: *{today}*\n\n"
+            f"*Сотрудники:*\n")
+
+    keyboard = []
+    for emp in employees[:15]:
+        cid, uname, fname, joined, _ = emp
+        l, q, avg, _, last = get_employee_stats(cid)
+        pct = round(l / TOTAL_LESSONS * 100)
+        bar = '█' * round(pct/10) + '░' * (10-round(pct/10))
+        text += f"\n👤 *{fname}* (@{uname})\n`{bar}` {pct}% · ✅{q} · ⭐️{avg}%\n"
+        keyboard.append([InlineKeyboardButton(
+            f"👤 {fname} — {pct}%",
+            callback_data=f"emp_{cid}")])
+
+    keyboard.append([InlineKeyboardButton("🔄 Обновить", callback_data="refresh_stats")])
+    await update.message.reply_text(
+        text, parse_mode="Markdown",
+        reply_markup=InlineKeyboardMarkup(keyboard))
+
+async def show_employee_detail(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    if not is_admin(update.effective_chat.id): return
+
+    cid = query.data.replace("emp_", "")
+    emp = get_employee(cid)
+    if not emp:
+        await query.edit_message_text("Сотрудник не найден")
+        return
+
+    cid_val, uname, fname, joined, showroom = emp
+    lessons, quizzes, avg, quiz_details, last = get_employee_stats(cid_val)
+    pct = round(lessons / TOTAL_LESSONS * 100)
+    bar = '█' * round(pct/10) + '░' * (10-round(pct/10))
+
+    modules_text = ""
+    done_mods = {str(qd[0]): (qd[1], qd[2]) for qd in quiz_details}
+    for i in range(1, 10):
+        mid = 'final' if i == 9 else str(i)
+        mname = MODULE_NAMES.get(i, f"Модуль {i}")
+        if mid in done_mods:
+            s, dt = done_mods[mid]
+            e = "✅" if s >= 60 else "⚠️"
+            modules_text += f"{e} {mname}: *{s}%* ({dt})\n"
+        else:
+            modules_text += f"🔒 {mname}\n"
+
+    text = (f"👤 *{fname}*\n"
+            f"💬 @{uname}\n"
+            f"📅 Зарегистрирован: {joined}\n"
+            f"🕐 Последняя активность: {last or 'нет'}\n\n"
+            f"`{bar}` *{pct}%*\n"
+            f"📚 Уроков: {lessons}/{TOTAL_LESSONS} · ✅ Тестов: {quizzes} · ⭐️ {avg}%\n\n"
+            f"*Прогресс по модулям:*\n{modules_text}")
+
+    kb = [[InlineKeyboardButton("⬅️ К списку", callback_data="back_to_stats")]]
+    await query.edit_message_text(text, parse_mode="Markdown",
+                                   reply_markup=InlineKeyboardMarkup(kb))
+
+async def admin_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not is_admin(update.effective_chat.id):
+        await update.message.reply_text("⛔️ Нет доступа.")
+        return
+    bot_username = (await context.bot.get_me()).username
+    invite_link = f"https://t.me/{bot_username}?start={INVITE_CODE}"
+    await update.message.reply_text(
+        f"🔗 *Ссылка для новых сотрудников:*\n\n`{invite_link}`\n\n"
+        f"Отправьте эту ссылку новому сотруднику.",
+        parse_mode="Markdown")
+
+async def admin_export(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Export all stats as CSV"""
+    if not is_admin(update.effective_chat.id):
         await update.message.reply_text("⛔️ Нет доступа.")
         return
 
     employees = get_all_employees()
-    if not employees:
-        await update.message.reply_text("Пока нет зарегистрированных сотрудников.")
-        return
-
-    text = f"👥 *Сотрудники DAFNA* ({len(employees)} чел.)\n\n"
+    lines = ["Имя,Telegram,Дата регистрации,Уроков,Тестов,Средний балл,%% прогресса,Финальный тест"]
     for emp in employees:
-        eid, uname, fname, joined, showroom = emp
-        lessons, quizzes, avg = get_employee_stats(eid)
-        text += (
-            f"👤 *{fname}*\n"
-            f"   @{uname} · {joined}\n"
-            f"   📚 {lessons} уроков · ✅ {quizzes}/5 тестов · ⭐️ {avg}%\n\n"
-        )
+        cid, uname, fname, joined, _ = emp
+        l, q, avg, quiz_details, _ = get_employee_stats(cid)
+        pct = round(l / TOTAL_LESSONS * 100)
+        final = next((f"{qd[1]}%" for qd in quiz_details if str(qd[0])=='final'), "Не сдан")
+        lines.append(f"{fname},@{uname},{joined},{l},{q},{avg}%,{pct}%,{final}")
 
-    await update.message.reply_text(text, parse_mode="Markdown")
+    csv_content = "\n".join(lines)
+    from io import BytesIO
+    bio = BytesIO(csv_content.encode('utf-8-sig'))
+    bio.name = f"dafna_stats_{datetime.now().strftime('%d%m%Y')}.csv"
+    await update.message.reply_document(document=bio,
+        filename=bio.name, caption="📊 Статистика Академии DAFNA")
 
-async def admin_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Команда /link — генерация ссылки приглашения"""
-    chat_id = str(update.effective_chat.id)
-    if chat_id != str(ADMIN_CHAT_ID):
-        await update.message.reply_text("⛔️ Нет доступа.")
-        return
+async def webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    chat_id = update.effective_chat.id
+    employee = get_employee(chat_id)
+    if not employee: return
+    try:
+        data = json.loads(update.effective_message.web_app_data.data)
+        action = data.get("action")
+        module_id = str(data.get("module_id", ""))
+        lesson_id = data.get("lesson_id", "")
+        score = int(data.get("score", 0))
+        name = employee[2]
 
-    bot_username = (await context.bot.get_me()).username
-    invite_link = f"https://t.me/{bot_username}?start={INVITE_CODE}"
+        is_new = save_progress(chat_id, module_id, lesson_id, action, score)
+        if not is_new: return
 
-    await update.message.reply_text(
-        f"🔗 *Ссылка для новых сотрудников:*\n\n"
-        f"`{invite_link}`\n\n"
-        f"Отправьте эту ссылку новому сотруднику. "
-        f"После перехода он пройдёт регистрацию и начнёт обучение.",
-        parse_mode="Markdown"
-    )
+        mod_name = MODULE_NAMES.get(int(module_id) if module_id.isdigit() else module_id, f"Модуль {module_id}")
+        now = datetime.now().strftime("%d.%m.%Y %H:%M")
 
-# ─────────────────────────────────────────────
-#  ЗАПУСК БОТА
-# ─────────────────────────────────────────────
+        if action == "lesson_done":
+            admin_msg = (f"📖 *Урок пройден*\n👤 {name}\n📚 {mod_name}\n📝 {lesson_id}\n🕐 {now}")
+        elif action in ("quiz_done", "final_done"):
+            emoji = "🏆" if score >= 80 else ("✅" if score >= 60 else "📝")
+            result = "Отлично!" if score >= 80 else ("Зачёт!" if score >= 60 else "Нужно повторить")
+            admin_msg = (f"{emoji} *{'Финальный тест' if action=='final_done' else 'Тест'} сдан*\n"
+                        f"👤 {name}\n📚 {mod_name}\n⭐️ *{score}%* — {result}\n🕐 {now}")
+            resp_text = f"{emoji} Результат: *{score}%* — {result}"
+            if action == "final_done" and score >= 70:
+                resp_text += "\n\n🎉 Поздравляем! Вы прошли программу обучения DAFNA!"
+            await update.message.reply_text(resp_text, parse_mode="Markdown")
+        else:
+            return
+
+        try:
+            await context.bot.send_message(
+                chat_id=ADMIN_CHAT_ID, text=admin_msg, parse_mode="Markdown")
+        except Exception as e:
+            print(f"Admin notify error: {e}")
+    except Exception as e:
+        print(f"Webapp data error: {e}")
+
 def main():
     init_db()
-    print("🚀 Бот DAFNA запускается...")
-
+    print("🚀 Бот DAFNA Academy запускается...")
     app = Application.builder().token(BOT_TOKEN).build()
-
-    # Команды
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("stats", admin_stats))
     app.add_handler(CommandHandler("link", admin_link))
-
-    # Кнопки
+    app.add_handler(CommandHandler("export", admin_export))
     app.add_handler(CallbackQueryHandler(callback_handler))
-
-    # Данные из мини-приложения
     app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, webapp_data))
-
-    # Ввод текста (имя при регистрации)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
-
-    print("✅ Бот запущен! Нажмите Ctrl+C для остановки.")
-    app.run_polling()
+    print("✅ Бот запущен!")
+    app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
     main()
